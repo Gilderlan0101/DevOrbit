@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ### AL ###
 #Template for AL projects for Dynamics 365 Business Central
 #launch.json folder
@@ -20,3 +21,78 @@ rad.json
 *.flf
 #Test results file
 TestResults.xml
+=======
+# Ignora as pastas e arquivos específicos
+teste_requestr_and_try
+/teste_requestr_and_try
+.teste_requestr_and_try
+
+usuarios.db
+.usuarios.db
+
+.db
+.env.local
+
+# Python / Virtual Environment
+__pycache__/
+*.py[cod]
+*.pyo
+*.pyd
+*.egg
+*.egg-info/
+.Python
+.tox/
+.nox/
+
+venv/
+*.wsgi
+*.webtest
+*.gunicorn.log
+*.log
+
+# Flask specific
+instance/
+
+# TailwindCSS
+tailwind.config.js
+postcss.config.js
+/node_modules/
+
+# Database
+*.sqlite3
+*.db
+
+# Secrets
+.env.local
+.secret_key
+secret/
+
+# User-specific settings
+.idea/
+.vscode/
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Auto-generated files
+coverage.xml
+nosetests.xml
+*.coverage
+.coverage.*
+pytest.ini
+
+# Python cache directories
+.pytest_cache/
+pyre/
+mypy/
+
+# Local development
+local_settings.py
+
+.logs
+*.log
+
+.venv
+poetry.lock
+>>>>>>> 841f46931c1a86e05e8c47881033a4e6db188d8b

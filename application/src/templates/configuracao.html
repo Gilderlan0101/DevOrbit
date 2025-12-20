@@ -1,0 +1,526 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='icon/icon_1.ico') }}" type="image/ico">
+    
+    <title>DevOrbit</title>
+</head>
+<body ">
+
+    <button data-drawer-target="cta-button-sidebar" data-drawer-toggle="cta-button-sidebar" aria-controls="cta-button-sidebar" type="button" class="inline-flex items-center p-2 mt-2 ms-3 text-sm text-gray-500 rounded-lg sm:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-800 dark:text-gray-800 dark:hover:bg-gray-700 dark:focus:ring-gray-600" onclick="mybar()">
+        <span class="sr-only">Open sidebar</span>
+        <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg">
+        <path clip-rule="evenodd" fill-rule="evenodd" d="M2 4.75A.75.75 0 012.75 4h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 4.75zm0 10.5a.75.75 0 01.75-.75h7.5a.75.75 0 010 1.5h-7.5a.75.75 0 01-.75-.75zM2 10a.75.75 0 01.75-.75h14.5a.75.75 0 010 1.5H2.75A.75.75 0 012 10z"></path>
+        </svg>
+     </button>
+
+ <aside id="cta-button-sidebar" class="topnav fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar" onclick="mybar()">
+    <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800"onclick="mybar()" >
+        <button
+    class="flex close-sidebar-btn  ml-4 p-1"
+    onclick="mybar()">
+    &times; <!-- Ícone de fechar -->
+  </button>
+       <ul class="space-y-2 font-medium">
+         <li>
+            <a href="{{url_for('home.home_page', usuario=username)}}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <i class=" fas fa-home w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+                <span class="ms-3">Home</span>
+            </a>
+        </li>
+
+
+
+      
+          
+      
+        
+          <li>
+             <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                   <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z"/>
+                </svg>
+                <span class="link-cumunidade flex-1 ms-3 whitespace-nowrap text-gray-900">Desafios do Mês</span>
+                <span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">Beta</span>
+             </a>
+          </li>
+          <li>
+             <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                   <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z"/>
+                </svg> 
+                <span class="link-cumunidade flex-1 ms-3 whitespace-nowrap text-gray-900">Mensagens</span>
+                <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">0</span>
+             </a>
+          </li>
+          <li>
+             <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                   <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/>
+                </svg>
+                <span class="link-cumunidade flex-1 ms-3 whitespace-nowrap text-gray-900">Criadores</span>
+             </a>
+          </li>
+          <li>
+             <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                   <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z"/>
+                </svg>
+                <span class="link-cumunidade  flex-1 ms-3 whitespace-nowrap text-gray-900">Galeria de Ideias</span>
+             </a>
+          </li>
+      
+          
+            <a href="{{ url_for('logout.logout') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <i class="fas fa-sign-out-alt flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+               <span class="link-cumunidade flex-1 ms-3 whitespace-nowrap text-gray-900">Logout</span>
+           </a>
+           
+       </ul>
+       <div id="dropdown-cta" class="p-4 mt-6 rounded-lg bg-blue-50 dark:bg-blue-900" role="alert">
+          <div class="flex items-center mb-3">
+             <span class="bg-orange-100 text-orange-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-orange-200 dark:text-orange-900">Beta</span>
+            
+          </div>
+          <p class="mb-3 text-sm text-blue-800 dark:text-blue-400">
+            Bem-vindo à versão beta do nosso site! Explore, participe e ajude-nos a melhorar essa comunidade criativa. Participe da nossa comunidade no Discord!
+          </p>
+          <a class="text-sm text-blue-800 underline font-medium hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300" href="https://discord.com/channels/1295856332376899720/1295856333316292631">Discord</a>
+       </div>
+    </div>
+ </aside>
+
+         <!-- img de fundo | Banner -->
+  <div class="banner-container">
+    <!-- Banner -->
+    <div class="w-full">
+        {% if banner %}
+        <img 
+          src="{{ url_for('static', filename=banner) }}"
+          alt="Banner" 
+          class="banner-image">
+      {% endif %}
+    </div>
+  </div>
+      
+        
+        <div class="max-w-lg mx-auto my-10 bg-white rounded-lg shadow-md p-5">
+          <img class="w-32 h-32 rounded-full mx-auto" 
+          {% if user_photo %}
+          src="{{ url_for('static', filename=user_photo) }}" 
+          data-image-url="{{ url_for('static', filename=user_photo) }}" 
+          onclick="handleImageClick(this)">
+          {% else %}
+          <img class="w-32 h-32 rounded-full mx-auto" 
+            src="{{url_for('static', filename='icon/default.svg')}}" 
+               alt="Default profile picture">
+          {% endif %}
+          
+        
+          <h2 class="user-name text-center text-2xl font-semibold mt-3 text-gray-100 flex items-center justify-center">
+            {{usuario}}
+            <img class="w-5 h-5 ml-2" src="{{url_for('static', filename='icon/verificado.png')}}" alt="Verificado">
+          </h2><br>
+          
+ <!-- Contêiner dos botões -->
+<div class="flex justify-center items-center space-x-2">
+  <!-- Foto -->
+  <div class="flex flex-col items-center">
+    <span class="text-center text-gray-100">Foto</span>
+    <button type="button" onclick="document.getElementById('files').click();" 
+      class="relative inline-flex items-center justify-center p-2 overflow-hidden text-sm font-medium text-gray-100 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-gray-100 dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 w-24">
+      <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#EFEFEF">
+        <path d="M440-438ZM106.67-120q-27 0-46.84-19.83Q40-159.67 40-186.67v-502q0-26.33 19.83-46.5 19.84-20.16 46.84-20.16h140L320-840h262.67v66.67H350.33l-73 84.66H106.67v502h666.66v-396H840v396q0 27-20.17 46.84Q799.67-120 773.33-120H106.67Zm666.66-569.33v-84h-84V-840h84v-84.67H840V-840h84.67v66.67H840v84h-66.67ZM439.67-264.67q73.33 0 123.5-50.16 50.16-50.17 50.16-123.5 0-73.34-50.16-123.17-50.17-49.83-123.5-49.83-73.34 0-123.17 49.83t-49.83 123.17q0 73.33 49.83 123.5 49.83 50.16 123.17 50.16Zm0-66.66q-45.67 0-76-30.67-30.34-30.67-30.34-76.33 0-45.67 30.34-76 30.33-30.34 76-30.34 45.66 0 76.33 30.34 30.67 30.33 30.67 76 0 45.66-30.67 76.33t-76.33 30.67Z"/>
+      </svg>
+    </button>
+    <input type="file" id="files" class="hidden"  accept="image/*" onchange="uploadImage(event)" />
+    <input type="hidden" id="id_usuario" value="{{ id_usuario }}">
+  </div>
+
+  <!-- Banner -->
+  <div class="flex flex-col items-center">
+    <span class="text-center text-gray-100">Banner</span>
+    <button type="button" onclick="document.getElementById('banner').click();" 
+      class="relative inline-flex items-center justify-center p-2 overflow-hidden text-sm font-medium text-gray-100 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-gray-100 dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 w-24">
+      <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#EFEFEF">
+        <path d="M280-280h533.33v-466.67H280V-280Zm0 66.67q-27 0-46.83-19.84Q213.33-253 213.33-280v-533.33q0-27 19.84-46.84Q253-880 280-880h533.33q27 0 46.84 19.83Q880-840.33 880-813.33V-280q0 27-19.83 46.83-19.84 19.84-46.84 19.84H280ZM146.67-80q-27 0-46.84-19.83Q80-119.67 80-146.67v-600h66.67v600h600V-80h-600ZM280-813.33V-280v-533.33Z"/>
+      </svg>
+    </button>
+    <input type="file" id="banner" class="hidden" accept="image/*" onchange="uploadImageBanner(event)" />
+    <input type="hidden" id="id_usuario" value="{{ id_usuario }}">
+
+  </div>
+</div>
+
+
+
+
+
+          <!-- Atualiza dados -->
+          <div class="fixed bottom-5 right-5">
+            <button type="button" onclick="recarregarAPagina()" 
+              class="relative inline-flex items-center justify-center p-2 mb-1 me-1 overflow-hidden text-sm font-medium text-gray-100 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-gray-100 dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 w-16 mr-2">
+              Salva
+            </button>
+          </div>
+          
+          
+          <p class="text-center text-gray-100 mt-1">Software Engineer</p>
+          <div class="flex justify-center mt-5">
+            <a href="#" class="text-blue-500 hover:text-blue-700 mx-3">Twitter</a>
+            <a href="#" class="text-blue-500 hover:text-blue-700 mx-3">LinkedIn</a>
+            <a href="#" class="text-blue-500 hover:text-blue-700 mx-3">GitHub</a>
+          </div>
+          <div class="mt-5 space-y-5">
+            <h3 class="text-xl text-gray-100 font-semibold">Bio</h3>
+            <p class="bio-user text-gray-100 mt-2">{{bio}}</p>
+            
+            <!-- Botão para editar a bio -->
+            <button id="showInputBtn" class="relative inline-flex items-center justify-center p-0.5 mb-1 me-1 overflow-hidden text-sm font-medium text-gray-100 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-gray-100 dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                <span class="relative px-5 py-2.5 transition-all ease-in duration-75 bg-white dark:bg-gray-900 rounded-md group-hover:bg-opacity-0">
+                    Editar bio
+                </span>
+            </button>
+        
+            <!-- Contêiner de input para editar a bio (inicialmente escondido) -->
+            <div id="inputContainer" style="display: none;">
+                <input type="text" id="bioInput" placeholder="Digite algo...">
+                <button id="saveBioBtn" class="relative inline-flex items-center justify-center p-0.5 mb-1 me-1 overflow-hidden text-sm font-medium text-gray-100 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-gray-100 dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                    Salvar
+                </button>
+            </div>
+            
+
+          
+            
+        
+            <!-- Campo hidden para armazenar o id_usuario -->
+            <input type="hidden" id="user_id" value="{{ id_usuario }}">
+        </div>
+          <br>
+        
+            <div class="space-y-5">
+                <h3 class="text-gray-100 ">Suas informações:</h3>
+                <dl class="infor_usuario ">
+                    <dt class="text-blue-400">Username:</dt>
+                    <dd class="text-gray-100">{{username}}</dd>
+                    
+                    <dt class="text-blue-400">Email:</dt>
+                    <dd class="text-gray-100">{{email_usuario}}</dd>
+                    
+                    <dt class="text-blue-400">Data de Criação:</dt>
+                    <dd class="text-gray-100">{{date_create}}</dd>
+                    
+                    <dt class="text-blue-400">Status:</dt>
+                    <dd class="text-gray-100">{{status}}</dd>
+                  </dl>
+                </div>
+        <br>
+         <hr class="bg-blue-300 w-full">
+        <br>
+        
+        
+        <!-- <div class="flex justify-center items-center">
+          {% with messages = get_flashed_messages(with_categories=True) %}
+              {% if messages %}
+                  <ul class="flashes">
+                      {% for category, message in messages %}
+                          <li class="text-red-600" if category == "error" else "text-green-600">{{ message }}</li>
+                      {% endfor %}
+                  </ul>
+              {% endif %}
+          {% endwith %}
+      </div>
+       -->
+
+        <div class="space-y-5">
+          <h3 class="text-gray-100">Configuração avançãda:</h3>
+          <dl class="infor_usuario ">
+            <dt class="text-blue-400">Links:</dt>
+            <div class="space-y-2">
+
+              <form id="linksForm" action="{{ url_for('config.config_account', usuario=usuario) }}" method="POST">
+
+                <!-- Campo GitHub -->
+                <div class="space-y-1">
+                    <label for="github" class="block text-gray-300">GitHub</label>
+                    <input type="text" id="github" name="github"
+                           class="relative inline-flex items-center justify-center p-0.5 mb-2 me-1 overflow-hidden text-sm font-medium text-gray-800 rounded-lg group bg-gradient-to-br from-gray-100  group-hover:from-purple-600 group-hover:to-blue-500 hover:text-gray-100 dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 border-2 
+                           {% if 'github' in get_flashed_messages(with_categories=True) %}border-red-500{% else %}border-transparent{% endif %}">
+                    
+                    {% with messages = get_flashed_messages(with_categories=True) %}
+                        {% for category, message in messages %}
+                            {% if category == "github" %}
+                                <p class="text-red-500 text-sm mt-1">{{ message }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    {% endwith %}
+                </div>
+            
+                <!-- Campo LinkedIn -->
+                <div class="space-y-1">
+                    <label for="linkedin" class="block text-gray-300">LinkedIn</label>
+                    <input type="text" id="linkedin" name="linkedin"
+                           class="relative inline-flex items-center justify-center p-0.5 mb-2 me-1 overflow-hidden text-sm font-medium text-gray-800 rounded-lg group bg-gradient-to-br from-gray-100  group-hover:from-purple-600 group-hover:to-blue-500 hover:text-gray-100 dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 border-2 
+                           {% if 'linkedin' in get_flashed_messages(with_categories=True) %}border-red-500{% else %}border-transparent{% endif %}">
+                    
+                    {% with messages = get_flashed_messages(with_categories=True) %}
+                        {% for category, message in messages %}
+                            {% if category == "linkedin" %}
+                                <p class="text-red-500 text-sm mt-1">{{ message }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    {% endwith %}
+                </div>
+            
+                <!-- Campo Site -->
+                <div class="space-y-1">
+                    <label for="site" class="block text-gray-300">Site</label>
+                    <input type="text" id="site" name="site"
+                           class="relative inline-flex items-center justify-center p-0.5 mb-2 me-1 overflow-hidden text-sm font-medium text-gray-800 rounded-lg group bg-gradient-to-br from-gray-100 group-hover:from-purple-600 group-hover:to-blue-500  dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800 border-2 
+                           {% if 'site' in get_flashed_messages(with_categories=True) %}border-gray-100{% else %}border-transparent{% endif %}">
+                    
+                    {% with messages = get_flashed_messages(with_categories=True) %}
+                        {% for category, message in messages %}
+                            {% if category == "site" %}
+                                <p class="text-red-500 text-sm mt-1">{{ message }}</p>
+                            {% endif %}
+                        {% endfor %}
+                    {% endwith %}
+                </div>
+                <br>
+            
+                <button type="submit" class="ml-2 p-2 bg-blue-500 w-full border-none text-white rounded-lg flex justify-center items-center  group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500">
+                  <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#EFEFEF">
+                    <path d="m200-553.67 96.67 41Q313.33-546 332-578q18.67-32 40-62l-71.33-14.33L200-553.67ZM350-472l126.67 126.33q52-22.66 101.33-55.66T662-469q77.33-77.33 115.83-162.5T816.67-812q-95.34.33-180.67 38.83-85.33 38.5-162.67 115.84-34.66 34.66-67.66 84Q372.67-524 350-472Zm212-85.67q-21-21-21-51.83t21-51.83q21-21 52-21t52 21q21 21 21 51.83t-21 51.83q-21 21-52 21t-52-21Zm-3.67 362.34L659-296l-14.33-71.33q-30 21.33-62 39.83t-65.34 35.17l41 97ZM880-875.67q12.33 131-30.5 243.84Q806.67-519 706-418.33q-.67.66-1.33 1.33-.67.67-1.34 1.33l21.34 106.34Q728-292.67 723-277q-5 15.67-17 27.67L536-78.67l-84.67-197.66L281-446.67 83.33-531.33l170.34-170q12-12 27.83-17 15.83-5 32.5-1.67l106.33 21.33q.67-.66 1.34-1 .66-.33 1.33-1 100.67-100.66 213.33-144Q749-888 880-875.67Zm-728.33 552q35-35 85.5-35.5t85.5 34.5q35 35 34.5 85.5t-35.5 85.5q-25.67 25.67-81.5 43-55.84 17.34-162.84 32Q92-185.67 109-241.83q17-56.17 42.67-81.84Zm47 47.34Q186-263 175.33-232.83q-10.66 30.16-17.33 72.5 42.33-6.67 72.5-17.17 30.17-10.5 43.5-23.17 16.67-15.33 17.33-38Q292-261.33 276-278q-16.67-16-39.33-15.5-22.67.5-38 17.17Z"/>
+                  </svg>
+                </button>
+                
+            </form>
+          
+                      <dt class="text-blue-400">Email:</dt>
+                      <dd class="text-gray-100">{{email_usuario}}</dd>
+                      
+                      <dt class="text-blue-400">Solicitar verificado</dt>
+                      <button id="saveBioBtn" class="relative inline-flex w-full items-center justify-center p-0.5 mb-1 me-1 overflow-hidden text-sm font-medium text-gray-100 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-gray-100 dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                        Verificado
+                     </button>
+                     <dl>
+                      <dt class="text-blue-400">Excluir:</dt>
+                      <button 
+                        id="saveBioBtn" 
+                        class="relative inline-flex w-full items-center justify-center p-0.5 mb-1 me-1 overflow-hidden text-sm font-medium text-gray-100 rounded-lg group bg-gradient-to-br from-purple-600 to-blue-500 group-hover:from-purple-600 group-hover:to-blue-500 hover:text-gray-100 focus:ring-4 focus:outline-none focus:ring-blue-300 dark:focus:ring-blue-800">
+                        Excluir conta
+                      </button>
+                    </dl>
+                  </div>
+          </div>
+         </div>
+      
+         <div id="deleteForm" class="hidden">
+          <div class="modal">
+            <h2 class="text-lg font-bold mb-2">Excluir Conta</h2>
+            <p class="text-gray-200 mb-4">Deseja realmente excluir sua conta? Essa ação não poderá ser desfeita.</p>
+            <label for="deleteReason" class="text-sm text-gray-300">Motivo da exclusão (opcional):</label>
+            <textarea 
+              id="deleteReason" 
+              class="w-full p-2 mt-1 rounded-lg bg-gray-800 text-white border border-gray-600"
+              rows="3"
+              placeholder="Descreva o motivo, se desejar..."></textarea>
+            <div class="flex justify-end mt-4">
+              <button 
+                class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 mr-2"
+                id="confirmDeleteBtn">
+                Confirmar
+              </button>
+              <button 
+                class="px-4 py-2 bg-gray-600 text-white rounded-lg hover:bg-gray-700"
+                id="cancelDeleteBtn">
+                Cancelar
+              </button>
+            </div>
+          </div>
+        </div>
+      
+
+
+<div class="flex flex-wrap justify-end space-x-4 bg-white shadow-lg rounded-lg overflow-hidden mx-auto max-w-screen-xl">
+    
+    <div class="bg-white shadow-lg rounded-lg w-80 overflow-hidden p-4 m-4">  <!-- Reduzir largura -->
+       
+        </div>
+        </div>
+         
+
+        <footer class="bg-white rounded-lg shadow dark:bg-gray-900 m-4 items-center">
+            <div class="w-full max-w-screen-xl mx-auto p-4 md:py-8">
+                <div class="sm:flex sm:items-center sm:justify-between w-auto ">
+                    <a href="{{url_for('home.home_page')}}" class="flex items-center mb-4 sm:mb-0  rounded-full space-x-3 rtl:space-x-reverse">
+                        <img src="{{url_for('static', filename='uploads/icon_devobirt.jpg')}}" class="h-10" alt="Flowbite Logo" />
+                        <span class="self-center text-2xl font-semibold whitespace-nowrap dark:text-white">Dev orbit</span>
+                    </a>
+                    <ul class="flex flex-wrap items-center mb-6 text-sm font-medium text-gray-500 sm:mb-0 dark:text-gray-400 justify-center sm:justify-end">
+                        <li>
+                            <a href="{{url_for('home.home_page')}}" class="hover:underline me-4 md:me-6 text-center">Home</a>
+                        </li>
+                        <li>
+                            <a href="#" class="hover:underline me-4 md:me-6">Política de Privacidade</a>
+                        </li>
+                        <li>
+                            <a href="#" class="hover:underline me-4 md:me-6">Licensing</a>
+                        </li>
+                        <li>
+                            <a href="#" class="hover:underline">Contato</a>
+                        </li>
+                    </ul>
+                </div>
+                <hr class="my-6 border-gray-200 sm:mx-auto dark:border-gray-700 lg:my-8" />
+                <span class="block text-sm text-gray-500 sm:text-center dark:text-gray-400">© 2024 <a href="{{url_for('home.home_page')}}" class="hover:underline">Dev orbit</a>. Todos os direitos reservados.</span>
+            </div>
+        </footer>
+        
+
+
+<style>
+
+      /* Estilo padrão para o body */
+      body {
+      background-color: #121212; /* Fundo claro */
+      color: black; /* Texto escuro */
+    }
+    
+    p {
+      color: gray; /* Texto do parágrafo padrão */
+    }
+    data {
+      color: black;
+    }
+    
+    community-post {
+      color: black;
+    }
+    CodePost{
+        color: azure;
+    } 
+       
+  
+    /* Botão de fechar (oculto por padrão) */
+    .close-sidebar-btn {
+      display: none; /* Não aparece em telas grandes */
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 50;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+  
+@keyframes flyUp {
+        0% {
+            transform: translateY(100%); /* Começa fora da tela (em baixo) */
+            opacity: 0; /* Invisível no início */
+        }
+        30% {
+            transform: translateY(50%); /* No meio da tela */
+            opacity: 1; /* Torna-se visível */
+        }
+        100% {
+            transform: translateY(-50%) scale(1.2); /* Sai da tela pelo topo */
+            opacity: 0; /* Desaparece no final */
+        }
+    }
+
+    .flying-animation {
+        animation: flyUp 2s cubic-bezier(0.55, 0.055, 0.675, 0.19) infinite; /* Caminho com aceleração */
+        will-change: transform, opacity;}
+
+     
+   
+    /* Animação de "voo" da nave */
+    @keyframes flyUp{
+        0% {
+            transform: translateY(100%); /* Começa fora da tela (em baixo) */
+            opacity: 0; /* Invisível no início */
+        }
+        30% {
+            transform: translateY(50%); /* No meio da tela */
+            opacity: 1; /* Torna-se visível */
+        }
+        100% {
+            transform: translateY(-50%) scale(1.2); /* Sai da tela pelo topo */
+            opacity: 0; /* Desaparece no final */
+        }
+    }
+
+    .flying-animation {
+        animation: flyUp 2s cubic-bezier(0.55, 0.055, 0.675, 0.19) infinite; /* Caminho com aceleração */
+        will-change: transform, opacity;
+    }
+
+    
+
+
+
+    @media (max-width: 768px) {
+      body {
+        background-color: #121212; /* Fundo escuro */
+        color: white; /* Texto claro */
+      }
+      h1 {
+        color: white; /* Título branco */
+      }
+      p {
+        color: white; /* Texto dos parágrafos em chartreuse */
+      }
+      .data {
+        color: white;
+      }
+      .user-name {
+        color: white;
+      }
+      .community-post {
+        color: white;
+      }
+      .post-cumunity-community {
+        color: #B3D9FF;
+      }
+      .flex {
+        justify-content: center !important;
+      }
+      .CodePost {
+        color: azure;
+      }
+  
+      /* Botão de fechar visível em telas menores */
+      .close-sidebar-btn {
+        display: block; /* Botão visível em dispositivos móveis */
+      }
+      .link-cumunidade{
+        color: #B3D9FF;
+      }
+    }
+</style>
+
+<script>
+
+function recarregarAPagina(){
+    window.location.reload();
+} 
+
+</script>
+
+<script src="{{url_for('static', filename='js/utils.js')}}"></script>
+<script src="{{url_for('static', filename='js/menu.js')}}"></script>
+
+<script src="{{url_for('static', filename='js/configuracao.js')}}"></script>
+</body>
+</html>

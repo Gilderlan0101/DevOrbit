@@ -1,0 +1,32 @@
+[tool.poetry]
+name = "codechamber"
+version = "0.1.0"
+description = "DevOrbit é uma rede social voltada para estudantes e entusiastas de tecnologia, onde você pode compartilhar conhecimento, se conectar com outros devs e colaborar em projetos de programação. Junte-se a nós para aprender, ensinar e trocar experiências no mundo da TI!"
+authors = ["Gilderlan <dacruzgg01@gmail.com>"]
+license = "MIT"
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python-dev = "python-dev-is-python3" 
+python = ">=3.9,<4.0"
+sqlalchemy = ">=2.0.37,<3.0.0"
+python-multipart = ">=0.0.20,<0.0.21"
+asgiref = ">=3.8.1,<4.0.0"
+flask-cors = ">=5.0.0,<6.0.0"
+bcrypt = ">=4.2.1,<5.0.0"
+flask-login = ">=0.6.3,<0.7.0"
+flask-restplus = ">=0.13.0,<0.14.0"
+flask-restx = ">=1.3.0,<2.0.0"
+flask-caching = ">=2.3.0,<3.0.0"
+requests = ">=2.32.3,<3.0.0"
+fastapi = ">=0.115.7,<0.116.0"
+aiosqlite = ">=0.20.0,<0.21.0"
+python-dotenv = "^1.0.1"
+flask-bcrypt = "^1.0.1"
+httpx = "^0.28.1"
+email-validator = "^2.2.0"
+uvicorn = "^0.34.0"
+
+[build-system]
+requires = ["poetry-core>=2.0.0,<3.0.0"]
+build-backend = "poetry.core.masonry.api"

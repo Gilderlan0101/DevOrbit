@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
+
+    <title>teste</title>
+</head>
+<body>
+    <h1>{{username}}</h1>
+    <img class="w-24 h-24 rounded-full border-4 border-gray-300 shadow-lg" 
+                           src="{{ url_for('static', filename=user_photo) }}" 
+                           alt="Foto de {{ username }}">
+    {%for post in posts%}
+    <div class="flex texte-cente, items-center" >
+        <h1>TEST</h1>
+       
+        <p class="text-gray-800"> {{post.nome}} </p>
+        <br>
+        <p class="text-gray-800"> {{post.post}} </p>
+        <br>
+        <p class="text-gray-800">{{post_id}}</p>
+        {%endfor%}
+    </div>
+
+</body>
+
+</html>

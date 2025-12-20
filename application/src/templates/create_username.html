@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DevOrbit</title>
+    <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='icon/icon_1.ico') }}" type="image/ico">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=home" />
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+
+</head>
+<body>
+
+  <div class="logo flex justify-center p-2 " >
+    <hr class="flex-1 border-t-2 border-gray-500 mx-4">
+    <h1 class="text-gray-100 text-center text-2xl">Dev Orbit</h1>
+    <hr class="flex-1 border-t-2 border-gray-500 mx-4">
+    
+   </div>
+
+   <div class="flex justify-center items-center min-h-screen bg-gray-900">
+    <div class="bg-gray-800 p-8 rounded-lg shadow-lg w-full max-w-lg">
+      <h1 class="text-center text-gray-100 text-2xl font-bold mb-6">Criar Nome de Usuário</h1>
+      <form method="POST" action="{{ url_for('username_page.register_username') }}">
+        <!-- Nome de Usuário -->
+        <div class="mb-4">
+          <label for="username" class="block text-gray-200 text-sm mb-2">Nome de Usuário</label>
+          <input type="text" id="username" name="username" placeholder="Digite seu nome de usuário"
+            class="w-full px-4 py-2 bg-gray-700 text-gray-100 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" required>
+        </div>
+  
+        <!-- Profissão -->
+        <div class="mb-4">
+          <label for="profession" class="block text-gray-200 text-sm mb-2">Selecione sua profissão</label>
+          <select id="profession" name="profession"
+            class="w-full px-4 py-2 bg-gray-700 text-gray-100 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">Escolha sua profissão</option>
+            <option value="developer_backend">Desenvolvedor Backend</option>
+            <option value="Estudante">Estudante</option>
+            <option value="developer_frontend">Desenvolvedor Frontend</option>
+            <option value="fullstack_developer">Desenvolvedor Full Stack</option>
+            <option value="data_scientist">Cientista de Dados</option>
+            <option value="ui_ux_designer">Designer UI/UX</option>
+            <option value="cloud_engineer">Engenheiro de Nuvem</option>
+            <option value="cybersecurity_specialist">Especialista em Cybersegurança</option>
+            <option value="mobile_developer">Desenvolvedor Mobile</option>
+            <option value="qa_tester">Analista de Testes (QA)</option>
+            <option value="database_admin">Administrador de Banco de Dados</option>
+            <option value="software_engineer">Engenheiro de Software</option>
+            <option value="product_manager">Gerente de Produto</option>
+            <option value="devops_engineer">Engenheiro DevOps</option>
+            <option value="game_developer">Desenvolvedor de Jogos</option>
+            <option value="ai_ml_engineer">Engenheiro de IA/ML</option>
+            <option value="it_support">Suporte de TI</option>
+            <option value="project_manager">Gerente de Projetos</option>
+            <option value="business_analyst">Analista de Negócios</option>
+            <option value="digital_marketer">Especialista em Marketing Digital</option>
+            <option value="network_admin">Administrador de Redes</option>
+            <option value="criador_de_conteudo_digital">criador de conteudo digital</option>
+
+           
+          </select>
+        </div>
+  
+        <!-- Conhecimento da DevOrbit -->
+        <div class="mb-4">
+          <label for="referral" class="block text-gray-200 text-sm mb-2">Como conheceu a DevOrbit?</label>
+          <select id="referral" name="referral"
+            class="w-full px-4 py-2 bg-gray-700 text-gray-100 border border-gray-600 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500">
+            <option value="">Selecione uma opção</option>
+            <option value="social_media">Mídias sociais</option>
+            <option value="friend">Indicação de um amigo</option>
+            <option value="google_search">Busca no Google</option>
+            <option value="youtube">YouTube</option>
+            <option value="other">Outro</option>
+          </select>
+        </div>
+  
+        
+  
+        <form method="POST" action="{{ url_for('temos.termos') }}">
+          <div class="flex items-center mb-6">
+            <input type="checkbox" id="terms" name="terms"
+              class="w-4 h-4 text-blue-500 bg-gray-700 border-gray-600 rounded focus:ring-2 focus:ring-blue-500" required>
+            <label for="terms" class="ml-2 text-sm text-gray-200">Aceito os <a href="{{url_for('temos.termos')}}" class="text-blue-400 hover:underline">termos e condições</a>.</label>
+          </div>
+        
+          <button type="submit" class="w-full px-4 py-2 bg-blue-500 text-gray-100 font-bold rounded-lg hover:bg-blue-600 transition">
+            Aceitar
+          </button>
+        </form>
+      </form>
+    </div>
+  </div>
+  
+</body>
+</html>
+
+<style>
+    /* Estilo padrão para o body */
+    body {
+      background-color: #121212; /* Fundo claro */
+      color: black; /* Texto escuro */
+    }
+    h1 {
+      color: black; /* Título padrão */
+    }
+    
+    data {
+      color: black;
+    }
+    user-name {
+      color: black;
+    }
+    community-post {
+      color: black;
+    }
+    CodePost{
+        color: azure;
+    } 
+    .options{
+      color: white;
+    }
+    .logo{
+      font-family: "Lobster", sans-serif;
+      font-weight: 400;
+      font-style: normal;
+    }
+  </style>

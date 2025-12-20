@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="icon" href="{{ url_for('static', filename='icon/icon_1.ico') }}" type="image/ico">
+
+    <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lobster&display=swap" rel="stylesheet">
+
+    <meta name="twitter:description" content="DevOrbit login">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="DevOrbit - Comunidade de Desenvolvedores">
+    <meta name="twitter:description" content="Conecte-se com desenvolvedores e compartilhe ideias na DevOrbit.">
+   
+
+    <title>DevOrbit Login</title>
+</head>
+<body class="bg-gray-800">
+
+   <div class="logo flex justify-center p-2 " >
+    <hr class="flex-1 border-t-2 border-gray-500 mx-4">
+    <h1 class="text-gray-100 text-center text-2xl">Dev Orbit</h1>
+    <hr class="flex-1 border-t-2 border-gray-500 mx-4">
+    
+   </div>
+      
+
+    
+  <div class=" font-sans flex items-center justify-center ">
+    <div class="login relative  flex flex-col sm:justify-center items-center w-full m-10  bg-gray-800 overflow-hidden mx-auto max-w-screen-xl align-items:center min-h-screen ">
+        <div class=" relative sm:max-w-sm w-full pointer-events-auto">
+            <div class="container relative w-full rounded-3xl  px-6 py-4 bg-gray-100 shadow-md ">
+                
+                <label for="name"  class="cotainer-main block mt-3 text-sm text-gray-700 text-center font-semibold">
+                    Login
+                </label>
+                <form method="POST" action="{{ url_for('login.login_page') }}">
+                                   
+                    <div>
+                        <input type="email" placeholder="E-mail" name="email" class="field-email-and-pwd mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0">
+                    </div>
+        
+                    <div class="mt-7">                
+                        <input type="password" placeholder="Senha" name="password" class="field-email-and-pwd mt-1 block w-full border-none bg-gray-100 h-11 rounded-xl shadow-lg hover:bg-blue-100 focus:bg-blue-100 focus:ring-0">                           
+                    </div>
+  
+                    <div class="mt-7 flex">
+                        <label for="remember_me" class="inline-flex items-center w-full cursor-pointer">
+                            <input id="remember_me" type="checkbox" name="remember_me" class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50" name="remember">
+                            <span class="ml-2 text-sm text-gray-600">
+                              Lembrar de mim
+                            </span>
+                        </label>
+        
+                       <div class="w-full text-right">     
+                            <a class="fild-center underline text-sm text-gray-600 hover:text-gray-900" href="#">
+                              Esqueceu sua senha?
+                            </a>                                  
+                       </div>
+                    </div>
+
+                    <div class="mt-7" id="loadingOverlay" style="display: none;">
+                        <div class="flex justify-center items-center">
+                            <img src="{{ url_for('static', filename='icon/nave.svg') }}" alt="Carregando..." class="w-20 h-20 flying-animation" />
+                        </div>
+                    </div>
+        
+                    <div>
+function chekSubmission(){
+function chekSubmission(){
+    <button class="container-center bg-gray-800 w-full py-3 text-center rounded-xl text-white shadow-xl hover:shadow-inner focus:outline-none transition duration-500 ease-in-out transform hover:-translate-x hover:scale-105"  onclick="return chekSubmission();">
+                            Continue
+                        </button>
+                    </div>
+        
+                    <div class="flex mt-7 items-center text-center">
+                        <hr class="border-gray-300 border-1 w-full rounded-md">
+                        <label class="block font-medium text-sm text-gray-800 w-full">
+                            Fazer login com
+                        </label>
+                        <hr class="container-center-txt border-gray-300 border-1 w-full rounded-md">
+                    </div>
+        
+                    <div class="flex mt-7 justify-center w-full" >
+                        <button class="container-center mr-5 bg-gray-800 border-none px-4 py-2 rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
+                            
+                            Facebook
+                        </button>
+        
+                        <button class="container-center bg-gray-800 border-none px-4 py-2 rounded-xl cursor-pointer text-white shadow-xl hover:shadow-inner transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
+                            
+                            Google
+                        </button>
+                    </div>
+        
+                     <div class="mt-7">
+                        <div class="flex justify-center items-center">
+                            <label class="mr-2 text-gray-800" >É novo aqui?</label>
+                            <a href="{{url_for('register.page_register')}}" class=" text-blue-500 transition duration-500 ease-in-out  transform hover:-translate-x hover:scale-105">
+                                Cria uma conta
+                            </a>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+  </div>
+  <style>
+    /* Estilo padrão para o body */
+    body {
+      background-color: #121212; /* Fundo escuro */
+      color: white; /* Texto claro */
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+    .logo{
+      font-family: "Lobster", sans-serif;
+      font-weight: 400;
+      font-style: normal;
+    }
+    loadingOverlay img {
+        filter: invert(1) brightness(100%) saturate(100%);
+
+    }
+    /* Estilo responsivo */
+    @media (max-width: 768px) {
+      .login {
+        position: absolute;
+        display: flex;
+        top: 5%;
+        justify-items: center;
+        justify-content: center;
+      }
+      .container{
+        overflow: hidden; /* Equivalente a overflow-hidden */
+        margin-left: auto; /* Parte de mx-auto */
+        margin-right: auto; /* Parte de mx-auto */
+        max-width: 1280px; /* Equivalente a max-w-screen-xl (normalmente 1280px no Tailwind) */
+        display: flex; /* Para alinhar items */
+        align-items: center; /* Equivalente a align-items:center */
+        min-height: 100vh; /* Equivalente a min-h-screen */
+      }
+
+      .cotainer-main{
+       
+        display: flex;
+        position: absolute;
+        top: 5%;
+        right: 45%;
+        left: 45%;
+        
+      }
+    .field-email-and-pwd{
+        width: 110%;
+    }
+
+    hr {
+  border: 1px solid #e2e8f0; /* border-gray-300 */
+  border-radius: 0.375rem; /* rounded-md */
+  width: 100%;
+    }
+
+    label {
+        font-size: 0.875rem; /* text-sm */
+        color: #2d3748; /* text-gray-800 */
+        font-weight: 500; /* font-medium */
+        margin: 0 1rem; /* Espaçamento entre os hr e a label */
+    }
+
+    .container-center-txt {
+         display: flex;
+         justify-content: center;
+         align-items: center;
+    
+}
+    button {
+  background-color: #2d3748; /* bg-gray-800 */
+  width: 100%; /* w-full */
+  padding: 12px; /* py-3 */
+  text-align: center;
+  border-radius: 12px; /* rounded-xl */
+  color: white; /* text-white */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* shadow-xl */
+  transition: transform 0.5s ease-in-out, box-shadow 0.5s ease-in-out; /* transition duration-500 ease-in-out */
+}
+
+    .container-center {
+    display: flex;
+    justify-content: center;
+
+    align-items: center;
+    text-align: center;
+    width: 110%;
+}
+    
+    }
+  </style>
+
+<script src="{{ url_for('static', filename='js/animations.js') }}"></script>
+
+
+</body>
+</html>

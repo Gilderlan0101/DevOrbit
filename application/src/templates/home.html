@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>DevOrbit</title>
+        <link href="{{ url_for('static', filename='css/output.css') }}" rel="stylesheet">
+        <!-- <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.3.0/dist/tailwind.min.css" rel="stylesheet"> -->
+
+        <link rel="icon" href="{{ url_for('static', filename='icon/icon_1.ico') }}" type="image/ico">
+
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=home">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/dracula.min.css">
+
+        <meta http-equiv="X-UA-Compatible" content="IE=edge"> <!-- Compatibilidade com navegadores antigos -->
+  
+        <!-- SEO Meta Tags -->
+        <meta name="description" content="DevOrbit - Uma comunidade para desenvolvedores e entusiastas de tecnologia, compartilhando conhecimento e inovação.">
+        <meta name="keywords" content="DevOrbit, desenvolvimento, tecnologia, programação, comunidade de devs">
+        <meta name="author" content="Gilderlan">
+        <meta name="robots" content="index, follow"> <!-- Indica que os buscadores podem indexar e seguir links -->
+
+        <meta property="og:title" content="DevOrbit - Comunidade de Desenvolvedores">
+        <meta property="og:description" content="Conecte-se com desenvolvedores e compartilhe ideias na DevOrbit.">
+        <meta property="og:image" content="https://seusite.com/imagem-de-preview.png"> <!-- Atualize com a URL correta -->
+        <meta property="og:url" content="https://seusite.com">
+        <meta property="og:type" content="website">
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="DevOrbit - Comunidade de Desenvolvedores">
+        <meta name="twitter:description" content="Conecte-se com desenvolvedores e compartilhe ideias na DevOrbit.">
+        <meta name="twitter:image" content="https://seusite.com/imagem-de-preview.png">
+</head>
+<body>
+   
+ 
+ <aside id="cta-button-sidebar" class="topnav fixed top-0 left-0 z-40 w-64 h-screen transition-transform -translate-x-full sm:translate-x-0" aria-label="Sidebar" onclick="mybar()">
+    <div class="h-full px-3 py-4 overflow-y-auto bg-gray-50 dark:bg-gray-800"onclick="mybar()" >
+       
+       <ul class="space-y-2 font-medium">
+         <li>
+          <div class="flex items-center space-x-4 p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+              <!-- Foto do usuário -->
+              {% if photo_user_profile %}
+              <img class="w-12 h-12 rounded-full border-4 border-gray-300 shadow-lg" 
+                   src="{{ url_for('static', filename=photo_user_profile) }}" 
+                   alt="Profile picture">
+              {% else %}
+              <img class="w-12 h-12 rounded-full border-4 border-gray-300 shadow-lg" 
+                   src="{{ url_for('static', filename='icon/default.svg') }}" 
+                   alt="Default profile picture">
+              {% endif %}
+              
+              <!-- Nome do usuário -->
+              <a href="{{ url_for('perfil.profile_page', usuario=id) }}" 
+                 class="text-blue-400 dark:text-white hover:underline"
+                 data-url="{{ url_for('perfil.profile_page', usuario=id) }}"
+                 onclick="showLoading()">
+                  {{ username }}
+              </a>
+          </div>
+      </li>
+            
+      
+             <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 18">
+                   <path d="M6.143 0H1.857A1.857 1.857 0 0 0 0 1.857v4.286C0 7.169.831 8 1.857 8h4.286A1.857 1.857 0 0 0 8 6.143V1.857A1.857 1.857 0 0 0 6.143 0Zm10 0h-4.286A1.857 1.857 0 0 0 10 1.857v4.286C10 7.169 10.831 8 11.857 8h4.286A1.857 1.857 0 0 0 18 6.143V1.857A1.857 1.857 0 0 0 16.143 0Zm-10 10H1.857A1.857 1.857 0 0 0 0 11.857v4.286C0 17.169.831 18 1.857 18h4.286A1.857 1.857 0 0 0 8 16.143v-4.286A1.857 1.857 0 0 0 6.143 10Zm10 0h-4.286A1.857 1.857 0 0 0 10 11.857v4.286c0 1.026.831 1.857 1.857 1.857h4.286A1.857 1.857 0 0 0 18 16.143v-4.286A1.857 1.857 0 0 0 16.143 10Z"/>
+                </svg>
+                <span class="link-cumunidade flex-1 ms-3 whitespace-nowrap text-gray-900">Artigos</span>
+                <span class="inline-flex items-center justify-center px-2 ms-3 text-sm font-medium text-gray-800 bg-gray-100 rounded-full dark:bg-gray-700 dark:text-gray-300">Beta</span>
+             </a>
+          </li>
+          <li>
+             <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
+                   <path d="m17.418 3.623-.018-.008a6.713 6.713 0 0 0-2.4-.569V2h1a1 1 0 1 0 0-2h-2a1 1 0 0 0-1 1v2H9.89A6.977 6.977 0 0 1 12 8v5h-2V8A5 5 0 1 0 0 8v6a1 1 0 0 0 1 1h8v4a1 1 0 0 0 1 1h2a1 1 0 0 0 1-1v-4h6a1 1 0 0 0 1-1V8a5 5 0 0 0-2.582-4.377ZM6 12H4a1 1 0 0 1 0-2h2a1 1 0 0 1 0 2Z"/>
+                </svg> 
+                <span class="link-cumunidade flex-1 ms-3 whitespace-nowrap text-gray-900">Mensagens</span>
+                
+                <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">532</span>
+             </a>
+          </li>
+          <li>
+             <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 18">
+                   <path d="M14 2a3.963 3.963 0 0 0-1.4.267 6.439 6.439 0 0 1-1.331 6.638A4 4 0 1 0 14 2Zm1 9h-1.264A6.957 6.957 0 0 1 15 15v2a2.97 2.97 0 0 1-.184 1H19a1 1 0 0 0 1-1v-1a5.006 5.006 0 0 0-5-5ZM6.5 9a4.5 4.5 0 1 0 0-9 4.5 4.5 0 0 0 0 9ZM8 10H5a5.006 5.006 0 0 0-5 5v2a1 1 0 0 0 1 1h11a1 1 0 0 0 1-1v-2a5.006 5.006 0 0 0-5-5Z"/>
+                </svg>
+                <span class="link-cumunidade flex-1 ms-3 whitespace-nowrap text-gray-900">Criadores</span>
+             </a>
+          </li>
+          <li>
+             <a href="#" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+                <svg class="flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 18 20">
+                   <path d="M17 5.923A1 1 0 0 0 16 5h-3V4a4 4 0 1 0-8 0v1H2a1 1 0 0 0-1 .923L.086 17.846A2 2 0 0 0 2.08 20h13.84a2 2 0 0 0 1.994-2.153L17 5.923ZM7 9a1 1 0 0 1-2 0V7h2v2Zm0-5a2 2 0 1 1 4 0v1H7V4Zm6 5a1 1 0 1 1-2 0V7h2v2Z"/>
+                </svg>
+                <span class="link-cumunidade  flex-1 ms-3 whitespace-nowrap text-gray-900">Galeria de Ideias</span>
+             </a>
+          </li>
+          
+          
+            <a href="{{ url_for('logout.logout') }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+               <i class="fas fa-sign-out-alt flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+               <span class="link-cumunidade flex-1 ms-3 whitespace-nowrap text-gray-900">Logout</span>
+           </a>
+
+          <li>
+          
+          <a href="{{ url_for('config.config_account', usuario=usuario) }}" class="flex items-center p-2 text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
+             <i class="fas fa-cogs flex-shrink-0 w-5 h-5 text-gray-500 transition duration-75 dark:text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white"></i>
+             <span class="link-cumunidade flex-1 ms-3 whitespace-nowrap text-gray-900">Configuração</span>
+         </a>
+       </ul>
+
+       <div id="dropdown-cta" class="p-4 mt-6 rounded-lg bg-blue-50 dark:bg-blue-900" role="alert">
+          <div class="flex items-center mb-3">
+             <span class="bg-orange-100 text-orange-800 text-sm font-semibold me-2 px-2.5 py-0.5 rounded dark:bg-orange-200 dark:text-orange-900">Beta</span>
+            
+          </div>
+          <p class="mb-3 text-sm text-blue-800 dark:text-blue-400">
+            Bem-vindo à versão beta do nosso site! Explore, participe e ajude-nos a melhorar essa comunidade criativa. Participe da nossa comunidade no Discord!
+          </p>
+          <a class="text-sm text-blue-800 underline font-medium hover:text-blue-900 dark:text-blue-400 dark:hover:text-blue-300" href="https://discord.com/channels/1295856332376899720/1295856333316292631">Discord</a>
+       </div>
+    </div>
+ </aside>
+
+
+ 
+ <div class="p-4 sm:ml-64">
+   <!-- component -->
+   <div class="flex flex-col items-center">
+     <div class="flex justify-between items-center w-full">
+       <!-- Bolinha animada -->
+       <span class="relative flex h-3 w-3">
+         <span class="animate-ping-lento absolute inline-flex h-full w-full rounded-full bg-sky-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3 w-3 bg-sky-500"></span>
+          </span>
+          <!-- Texto fixo -->
+          <span class="ml-2 text-gray-100 font-medium">Melhor CodePost</span>
+          <!-- Botão de denúncia -->
+           
+          <h4 class="ml-auto px-2 py-1 bg-gray-600 text-gray-100 font-bold rounded hover:bg-gray-200 hover:text-gray-800 transition"
+             href="{{ url_for('denucia.page_denucia')  }}">
+             DevOrbit
+        </h4>
+        
+        <div id="btn-search">
+          <button id="open" style="display: flex; position: absolute; right: 105px; margin: 5px; top: 10px;">
+            <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#75FBFD">
+              <path d="M792-120.67 532.67-380q-30 25.33-69.64 39.67Q423.39-326 378.67-326q-108.44 0-183.56-75.17Q120-476.33 120-583.33t75.17-182.17q75.16-75.17 182.5-75.17 107.33 0 182.16 75.17 74.84 75.17 74.84 182.27 0 43.23-14 82.9-14 39.66-40.67 73l260 258.66-48 48Zm-414-272q79.17 0 134.58-55.83Q568-504.33 568-583.33q0-79-55.42-134.84Q457.17-774 378-774q-79.72 0-135.53 55.83-55.8 55.84-55.8 134.84t55.8 134.83q55.81 55.83 135.53 55.83Z"/>
+            </svg>
+          </button>
+        </div>
+        
+        <!-- Modal -->
+        <div class="modal-container" id="modal-container">
+          <div class="modal">
+            <div class="search-container justify-center items-center h-12 m-5 text-black-500">
+              <input 
+                class="w-full h-10 px-4 py-2 border-none" 
+                type="search" 
+                name="search" 
+                id="search" 
+                placeholder="Pesquisa"
+              >
+            </div>
+        
+            <!-- Resultados serão exibidos aqui -->
+            <div id="search-results">
+              <a href="#">
+                <span class="text-center " ></span>
+              </a>
+              
+            </div>
+          </div>
+
+        </div>  
+        </div>
+      </div>
+      
+      
+      
+      <div class="mt-2 text-center p-4 ">
+        <a class="post-cumunity-community  text-2xl text-blue-300 font-bold pl-4" href="#">{{ post_banner.titulo}}</a>
+        <p class="community-post mt-2 text-gray-100 text-center ml-4">{{post_banner.post}} </p>
+        <a class="flex justify-center mx-4 text-gray-100" href="{{ url_for('perfil.profile_page', usuario=post_banner.nome) }}">
+          <p class="text-blue-500 mx-2">Author:</p> <p class="text-gray-100">{{ post_banner.nome }} </p>
+      </a>
+
+      </div>
+          <img class="mx-4 w-10 h-10 object-cover rounded-full hidden sm:block" 
+               src="https://media.giphy.com/media/pLYBun7vprp62Ufhxc/giphy.gif" 
+               alt="avatar">
+        </div>
+      </div>
+    </div>
+
+    <div class="noticia relative ml-4 m-5">
+      <ul class="list-none p-0 h-auto flex flex-wrap gap-4 justify-center">
+        {% for news in data_noticias %}
+        <li class="noticia-item flex flex-col justify-between border shadow-lg rounded-lg bg-white w-[300px] min-h-[400px]">
+          <span class="text-blue-500 text-sm uppercase whitespace-pre-line flex text-center items-center justify-center">
+            {{ news.titulo }}
+          </span>
+    
+          {% if news.imagem %}
+          <img src="{{ news.imagem }}" alt="Imagem da notícia" class="w-full h-40 object-cover">
+          {% else %}
+          <p class="text-center text-gray-500">Imagem não disponível</p>
+          {% endif %}
+    
+          <p class="text-gray-100 text-center break-words">
+            {{ news.resumo }}
+          </p>
+    
+          {% if news.url %}
+          <a class="text-white bg-blue-500 hover:bg-blue-600 text-lg py-2 px-4 rounded-md shadow-md transition duration-300 ease-in-out transform hover:scale-105 flex items-center justify-center mt-4"
+             href="{{ news.url }}" target="_blank" rel="noopener noreferrer">
+            Leia mais
+          </a>
+          {% endif %}
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+    
+    
+    <div class="flex flex-wrap gap-4 justify-start items-start m-5 mb-4  bg-white shadow-lg rounded-lg overflow-hidden mx-auto w-200 xl min-h-screen">
+      {% for post in posts %}
+        <div class="bg-white shadow-lg rounded-lg w-200 overflow-hidden border p-8  flex items-start hover:shadow-2xl hover:border-gray-300 mx-auto">
+          
+          <!-- Conteúdo do Post (aqui fica o conteúdo central) -->
+          <div class="flex flex-col w-120 space-x-4">
+            <!-- Cabeçalho do Post -->
+            <div class="flex items-center p-4 border-gray-200 justify-center m-2 mt-20">
+              {% if post.user_photo %}
+              <img class="w-32 h-32 rounded-full mx-auto border-4 border-blue-300 shadow-lg" 
+                   src="{{ url_for('static', filename=post.user_photo) }}" 
+                   alt="foto de: {{post.nome}}">
+              {% else %}
+              <img class="w-24 h-24 rounded-full mx-auto border-4 border-white shadow-lg" 
+                   src="{{ url_for('static', filename='icon/default.svg') }}" 
+                   alt="foto de: {{post.nome}}">
+              {% endif %}
+              <div class="flex m-auto mt-5">
+                <a href="{{ url_for('perfil.profile_page', usuario=post.user_id) }}">
+                  <h2 class="user-name text-center text-1xl font-semibold text-gray-100 flex items-end">
+                    {{ post.nome }}
+                    <img class="w-5 h-5 ml-2" src="{{ url_for('static', filename='icon/verificado.png') }}" alt="Verificado">
+                  </h2>
+                </a>
+                <span id="data" class="data text-xs text-gray-100 mt-9 ml-[-35px]">{{ post.data }}</span>
+              </div>
+            </div>
+
+          
+    
+            <!-- Conteúdo do Post -->
+            <div class="m-3 flex justify-center">
+              <span class="text-blue-400 text-sm uppercase whitespace-pre-line text-center items-center">{{ post.titulo }}</span>
+            </div>
+            <div class="p-4 max-w-full justify-center flex-wrap rounded-lg items-center">
+              {% if post.img_url %}
+              <img 
+                src="https://api-devorbirt.onrender.com/files/{{ post.img_url.split('/')[-1] }}" 
+                data-src="https://api-devorbirt.onrender.com/files/{{ post.img_url.split('/')[-1] }}" 
+                alt="Post Image"
+                onclick="handleImageClick(this)" 
+                loading="lazy">
+              {% endif %}
+            </div>
+            <div class="ml-3">
+              <pre><code class="community-pos text-gray-100 text-sm whitespace-pre-line text-justify-start break-words">
+                {{ post.post | safe }}
+              </code></pre>
+            </div>
+          </div>
+          
+          <script>
+            document.addEventListener("DOMContentLoaded", () => {
+              document.querySelectorAll('pre code').forEach((block) => {
+                hljs.highlightElement(block);
+              });
+            });
+
+            document.addEventListener("DOMContentLoaded", () => {
+            const observer = new IntersectionObserver(
+            (entries) => {
+            entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+            hljs.highlightElement(entry.target);
+          }
+        });
+      },
+        { threshold: 0.1 }
+    );
+
+      document.querySelectorAll('pre code').forEach((block) => {
+      observer.observe(block);
+      });
+    });
+      </script>
+          
+          <style>
+           .hljs {
+              background: none !important; /* Sem fundo */
+              color: #f8f8f2 !important; /* Texto claro */
+              }
+
+            .hljs-keyword {
+            color: #ff79c6; /* Palavras-chave */
+                }
+
+            .hljs-string {
+            color: #f1fa8c; /* Strings */
+            }
+
+          .dark .hljs {
+           color: #282a36; /* Para temas claros */
+            }
+          </style>
+    
+    <div class="post-actions flex flex-col justify-between  w-72 h-full items-start  m-4 space-y-4 p-4">
+      <!-- Botão de Like -->
+    
+  <button class=" flex items-center text-gray-600 hover:text-gray-800 bg-transparent like-button" 
+          data-id="{{ post.id }}" data-user-id="{{ id }}">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EFEFEF">
+      <path d="m480-120-58-52q-101-91-167-157T150-447.5Q111-500 95.5-544T80-634q0-94 63-157t157-63q52 0 99 22t81 62q34-40 81-62t99-22q94 0 157 63t63 157q0 46-15.5 90T810-447.5Q771-395 705-329T538-172l-58 52Zm0-108q96-86 158-147.5t98-107q36-45.5 50-81t14-70.5q0-60-40-100t-100-40q-47 0-87 26.5T518-680h-76q-15-41-55-67.5T300-774q-60 0-100 40t-40 100q0 35 14 70.5t50 81q36 45.5 98 107T480-228Zm0-273Z"/>
+    </svg>
+    <span class="ml-2 text-sm" id="like-count-{{ post.id }}">{{ post.likes }}</span>
+  </button>
+  
+
+  <!-- Botão Compartilhar -->
+  <button class="flex items-center text-gray-600 hover:text-gray-800 bg-transparent ">
+    <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EFEFEF">
+      <path d="m226-559 78 33q14-28 29-54t33-52l-56-11-84 84Zm142 83 114 113q42-16 90-49t90-75q70-70 109.5-155.5T806-800q-72-5-158 34.5T492-656q-42 42-75 90t-49 90Zm178-65q-23-23-23-56.5t23-56.5q23-23 57-23t57 23q23 23 23 56.5T660-541q-23 23-57 23t-57-23Zm19 321 84-84-11-56q-26 18-52 32.5T532-299l33 79Zm313-653q19 121-23.5 235.5T708-419l20 99q4 20-2 39t-20 33L538-80l-84-197-171-171-197-84 167-168q14-14 33.5-20t39.5-2l99 20q104-104 218-147t235-24ZM157-321q35-35 85.5-35.5T328-322q35 35 34.5 85.5T327-151q-25 25-83.5 43T82-76q14-103 32-161.5t43-83.5Zm57 56q-10 10-20 36.5T180-175q27-4 53.5-13.5T270-208q12-12 13-29t-11-29q-12-12-29-11.5T214-265Z"/>
+    </svg>
+  </button>
+  <!-- Comentários -->
+  <div id="comments-post-{{ post.id }}" class="overflow-y-auto max-h-64 flex items-center flex-col gap-1 space-y-4 w-72 m-0 p-4 text-left">
+    <ul class="text-gray-100 space-y-4">
+      {% for comment in post.comments %}
+        {% if comment.comment %}
+        <li class="flex items-center space-x-4 p-5 rounded-lg shadow-md">
+          <div class="flex items-start space-y-4 p-3">
+            <div class="flex-shrink-0">
+              {% if comment.photo %}
+              <img class="w-14 h-14 rounded-full border-2 border-gray-400 shadow-md hover:scale-105 transition-all duration-300" 
+                   src="{{ url_for('static', filename=comment.photo) }}" 
+                   alt="Profile picture">
+              {% else %}
+              <img class="w-14 h-14 rounded-full border-4 border-gray-500 shadow-md hover:scale-105 transition-all duration-300" 
+                   src="{{ url_for('static', filename='icon/default.svg') }}" 
+                   alt="Default profile picture">
+              {% endif %}
+            </div>
+            <div class="show-comentario flex flex-col p-4 justify-start items-center">
+              <a href="{{ url_for('perfil.profile_page', usuario=comment.user_id) }}">
+                <h4 class="text-lg font-semibold text-gray-100">{{ comment.username }}</h4>
+              </a>
+              <small class="text-xs text-gray-400">{{ comment.date_creation }}</small>
+              <p class="whitespace-pre-line text-left">{{ comment.comment }}</p>
+            </div>
+          </div>
+        </li>
+        {% endif %}
+      {% endfor %}
+      
+    </ul>
+  </div>
+
+        <!-- Formulário fixo na parte inferior envio de comentario -->
+        <div  class="w-full mt-4 sticky bottom-0 bg-white p-4">
+          <form id="comment-form-{{ post.id }}">
+            <input type="hidden" id="post-id" name="post_id" value="{{ post.id }}">
+            <input type="hidden" id="user-id" name="user_id" value="{{ id }}">
+          
+
+            <textarea id="comment" name="comment" class="w-full p-3 border rounded-lg bg-gray-800 text-gray-100" placeholder="Adicione seu comentário..." required></textarea>
+
+            <button  type="submit" class="w-full mt-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-all">Comentar</button>
+          </form>
+        </div>
+              </div>
+          </div>
+            {% endfor %}
+          </div>
+          
+
+    
+          <div class="fixed flex bottom-6 end-6 group desktop-only">
+            <!-- Botão de Ação Único -->
+            <a href="{{ url_for('page_posts.create_post_route') }}" class="flex items-center justify-center w-14 h-14 text-white bg-blue-700 rounded-full hover:bg-blue-800 dark:bg-blue-600 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800">
+                <!-- Ícone de Avião -->
+                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                    <path d="M2.5 19.83l6.72-2.69 2.68 6.72c.14.37.66.36.77-.01l9-21c.14-.32-.23-.68-.56-.54l-21 9c-.37.14-.38.63-.01.77l6.72 2.68L2.5 19.83Z"/>
+                </svg>
+                <span class="sr-only">Create New Post</span>
+            </a>
+          </div>
+    
+        <!-- Bottom Navigation Bar (visível apenas em dispositivos pequenos) -->
+        <div class="space-y-6  font-medium">
+          <div class="fixed bottom-0 left-0 w-full h-14  bg-gray-800 text-white flex justify-around items-center py-3 shadow-md md:hidden border-t border-white space-x-5">
+            <a href="{{url_for('home.home_page')}}" class="flex flex-col items-center text-sm space-x-4">
+              <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#EFEFEF"><path d="M226.67-186.67h140v-246.66h226.66v246.66h140v-380L480-756.67l-253.33 190v380ZM160-120v-480l320-240 320 240v480H526.67v-246.67h-93.34V-120H160Zm320-352Z"/>
+              </svg>
+            </a>
+            <a href="#explore" class="flex flex-col items-center text-sm space-x-5">
+              <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#EFEFEF"><path d="m302-302 273.33-82 82-273.33-273.33 82L302-302Zm177.84-131.33q-19.51 0-33.01-13.66-13.5-13.66-13.5-33.17t13.66-33.01q13.66-13.5 33.17-13.5t33.01 13.66q13.5 13.66 13.5 33.17t-13.66 33.01q-13.66 13.5-33.17 13.5ZM480.18-80q-82.83 0-155.67-31.5-72.84-31.5-127.18-85.83Q143-251.67 111.5-324.56T80-480.33q0-82.88 31.5-155.78Q143-709 197.33-763q54.34-54 127.23-85.5T480.33-880q82.88 0 155.78 31.5Q709-817 763-763t85.5 127Q880-563 880-480.18q0 82.83-31.5 155.67Q817-251.67 763-197.46q-54 54.21-127 85.84Q563-80 480.18-80Zm.14-66.67q138.68 0 235.85-97.49 97.16-97.49 97.16-236.16 0-138.68-97.16-235.85-97.17-97.16-235.85-97.16-138.67 0-236.16 97.16-97.49 97.17-97.49 235.85 0 138.67 97.49 236.16 97.49 97.49 236.16 97.49ZM480-480Z"/>
+              </svg>
+            </a>
+
+            <a href="{{ url_for('page_posts.create_post_route') }}" class="flex flex-col items-center text-sm space-x-5">
+              <div class="create-post flex justify-center items-center ">
+                <a href="{{ url_for('page_posts.create_post_route') }}" class="flex flex-col items-center justify-center w-10 h-10 text-white bg-blue-800 rounded-full  dark:bg-gray-800 dark:hover:bg-blue-700 focus:ring-4 focus:ring-blue-300 focus:outline-none dark:focus:ring-blue-800 
+                    transform transition-transform duration-100 ease-in-out hover:scale-110 hover:animate-pulse">
+                  <!-- Ícone de Avião -->
+                  <svg xmlns="http://www.w3.org/2000/svg" height="40px" viewBox="0 -960 960 960" width="40px" fill="#EFEFEF"><path d="M446.67-446.67H200v-66.66h246.67V-760h66.66v246.67H760v66.66H513.33V-200h-66.66v-246.67Z"/>
+                  
+                  </svg>
+                </a>
+              </div>
+            </a>
+
+          <a href="{{url_for('home.home_page')}}" class="flex flex-col items-center text-sm space-x-4 mt-5">
+            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#EFEFEF"><path d="M240-400h320v-80H240v80Zm0-120h480v-80H240v80Zm0-120h480v-80H240v80ZM80-80v-720q0-33 23.5-56.5T160-880h640q33 0 56.5 23.5T880-800v480q0 33-23.5 56.5T800-240H240L80-80Zm126-240h594v-480H160v525l46-45Zm-46 0v-480 480Z"/></svg>
+            <span class="inline-flex items-center justify-center w-3 h-3 p-3 ms-3 text-sm font-medium text-blue-800 bg-blue-100 rounded-full dark:bg-blue-900 dark:text-blue-300">0</span>
+          
+          </a>
+
+          <a href="{{ url_for('perfil.profile_page', usuario=username) }}" class="flex flex-col items-center text-sm space-x-5 m-0">
+            <div class="flex items-center p-2 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg">
+              <!-- Foto do usuário -->
+              {% if photo_user_profile %}
+              <img class="w-12 h-12 rounded-full border-2 border-gray-300 shadow-lg" 
+                   src="{{ url_for('static', filename=photo_user_profile) }}" 
+                   alt="Profile picture">
+              {% else %}
+              <img class="w-12 h-12 rounded-full border-4 border-gray-300 shadow-lg" 
+                   src="{{ url_for('static', filename='icon/default.svg') }}" 
+                   alt="Default profile picture">
+              {% endif %}
+            </div>
+          </a>
+          </div>
+        </div>
+<style>
+    /* Estilo padrão para o body */
+    body {
+      background-color: #121212; /* Fundo claro */
+      color: black; /* Texto escuro */
+    }
+    h1 {
+      color: black; /* Título padrão */
+    }
+    
+    data {
+      color: black;
+    }
+    user-name {
+      color: black;
+      border: 2px solid red;
+      
+    }
+    community-post {
+      color: black;
+    }
+    CodePost{
+        color: azure;
+    } 
+    .options{
+      color: white;
+    }
+  
+    /* Botão de fechar (oculto por padrão) */
+    .close-sidebar-btn {
+      display: none; /* Não aparece em telas grandes */
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      z-index: 50;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 24px;
+      cursor: pointer;
+    }
+
+    .flash {
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+}
+.success {
+  background-color: #d4edda;
+  color: #155724;
+}
+.warning {
+  background-color: #fff3cd;
+  color: #856404;
+}
+.error {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+
+  
+    /* Media query para dispositivos móveis */
+    @media (max-width: 768px) {
+      body {
+        background-color: #121212; /* Fundo escuro */
+        color: white; /* Texto claro */
+      }
+      h1 {
+        color: white; /* Título branco */
+      }
+      p {
+        color: white; /* Texto dos parágrafos em chartreuse */
+      }
+      .data {
+        color: white;
+      }
+      .user-name {
+        color: white;
+      }
+      .community-post {
+        color: white;
+      }
+      .post-cumunity-community {
+        color: #B3D9FF;
+      }
+      .flex {
+        justify-content: center !important;
+      }
+      .CodePost {
+        color: azure;
+      }
+      .options{
+        color: azure;
+      }
+  
+      /* Botão de fechar visível em telas menores */
+      .close-sidebar-btn {
+        display: block; /* Botão visível em dispositivos móveis */
+      }
+      .link-cumunidade{
+        color: #B3D9FF;
+      }
+      @keyframes fadeInUp {
+        0% {
+        opacity: 0;
+        transform: translateY(20px);
+        }
+        100% {
+          opacity: 1;
+          transform: translateY(0);
+  }
+}
+
+  </style>
+
+
+
+
+
+
+
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  
+<script>
+  
+  document.addEventListener('DOMContentLoaded', () => {
+  const buttons = document.querySelectorAll('.like-button');
+  
+  buttons.forEach((button) => {
+    // Remove qualquer evento duplicado antes de adicionar
+    button.replaceWith(button.cloneNode(true)); 
+    button.addEventListener('click', async () => {
+      const postId = button.dataset.id;
+      const userId = button.dataset.userId;
+      const likeCountElement = document.getElementById(`like-count-${postId}`);
+
+      if (!likeCountElement) {
+        console.error('Elemento de contagem de likes não encontrado!');
+        return;
+      }
+
+      try {
+        // Fazendo a requisição para curtir/descurtir
+        const response = await fetch(`https://api-devorbirt.onrender.com/user/${userId}/likes/${postId}`, {
+          method: 'PUT',
+          headers: { Accept: 'application/json' },
+        });
+
+        if (!response.ok) {
+          throw new Error(`Erro HTTP: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        if (data.likes !== undefined) {
+          // Atualiza o número de likes
+          likeCountElement.textContent = data.likes;
+
+          // Alterna a classe do botão
+          button.classList.toggle('text-blue-500');
+          button.classList.toggle('text-gray-600');
+        } else {
+          console.error('Resposta inesperada da API:', data);
+        }
+      } catch (error) {
+        console.error('Erro ao curtir o post:', error);
+        alert('Erro ao curtir o post. Tente novamente mais tarde.');
+      }
+    });
+  });
+});
+
+
+</script>
+  
+<script src="{{ url_for('static', filename='js/menu.js') }}"></script>
+<script src="{{url_for('static', filename='js/utils.js')}}"></script>
+<script src="{{url_for('static', filename='js/animations.js')}}"></script>
+<script src="{{url_for('static', filename='js/modal.js')}}"></script>
+
+
+</body>
+</html>

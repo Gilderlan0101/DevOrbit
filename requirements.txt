@@ -1,0 +1,23 @@
+python-dev==python-dev-is-python3
+flask-restplus==0.13.0
+flask-restx==1.3.0
+SQLAlchemy==2.0.36
+Flask-Caching==2.3.0
+requests==2.32.3
+fastapi==0.115.8
+python-multipart==0.0.17
+asgiref==3.8.1
+aiosqlite==0.20.0
+flask-cors==3.0.3
+bcrypt==1.0.1
+Flask-Login==0.5.0  # Adicionado o Flask-Login
+python-dotenv==1.0.1
+flask==-3.0.3
+flask_login==0.6.3
+flask_caching==2.3.0
+Flask_Cors==5.0.0
+flask_restx==1.3.0
+pydantic==2.10.6
+bcrypt==4.2.1
+httpx==0.28.1
+email_validator==2.2.0

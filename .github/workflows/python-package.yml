@@ -1,0 +1,41 @@
+name: DevOrbit CI/CD
+
+on:
+  push:
+    branches:
+      - master
+  pull_request:
+    branches:
+      - master
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y build-essential libssl-dev libffi-dev python-dev-is-python3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'  # Alterado para 3.10
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install --upgrade pip
+          pip install -r requirements.txt
+
+      - name: Run Flask app
+        run: |
+          source venv/bin/activate
+          export FLASK_APP=app.py  # Substitua por onde está seu arquivo principal Flask
+          export FLASK_ENV=development  # Ou 'production' conforme necessário
+          flask run --host=0.0.0.0 --port=5000

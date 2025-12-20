@@ -1,0 +1,299 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+
+
+/* Estilo base para o contêiner do banner */
+.banner-container {
+  position: relative;
+  width: 100%;
+  margin: 0;
+}
+
+/* Imagem do banner */
+.banner-image {
+  width: 100%;
+  height: 14rem; /* Altura padrão para banners (14rem = 224px) */
+  object-fit: cover; /* Mantém a proporção da imagem e preenche o espaço */
+  border-radius: 0.5rem; /* Borda arredondada opcional */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra para destacar o banner */
+  margin: 0px;
+}
+/* Responsividade */
+@media (max-width: 768px) {
+  .banner-image {
+      height: 10rem; /* Ajusta a altura para telas menores */
+      display: flex;
+      position: relative;
+      z-index: 1; /* Mantém o banner atrás das informações do usuário */
+  }
+
+  .foto {
+      display: flex;
+      position: absolute;
+      top: 20%;
+      z-index: 2; /* Mantém a foto à frente do banner */
+      width: 100px;
+      height: 100px;
+      padding: 5px;
+      margin: 0;
+  }
+
+  .followes {
+
+      margin: 10px;
+      /* Ajusta o espaçamento para centralizar e afastar as informações do banner */
+  }
+  .btn-bar{
+    margin: 0;
+  }
+}
+
+@media (max-width: 480px) {
+  .banner-image {
+    height: 8rem; /* Altura reduzida em dispositivos muito pequenos */
+ 
+  
+  }
+
+  
+}
+.noticia{
+  position: absolute;
+  left: 79%;
+  margin: 0;
+  padding: 15px;
+  
+}
+
+.noticia ul {
+  display: flex;            /* Ativa o Flexbox */
+  flex-direction: column;   /* Organiza os itens em uma coluna */
+  gap: 16px;                /* Espaçamento entre os itens */
+  justify-content: flex-start; /* Alinha os itens no topo */
+  
+ 
+}
+
+.noticia-item {
+  display: block;           /* Garante que os itens ocupem toda a largura disponível */
+  width: 245px;              /* Cada item ocupa 100% da largura disponível */
+  min-height: 320px;        /* Altura mínima para cada item */
+  padding: 16px;            /* Espaçamento interno */
+  box-sizing: border-box;   /* Inclui padding no cálculo do tamanho */
+}
+
+.noticia-item img {
+  max-height: 160px;        /* Limita a altura da imagem */
+  object-fit: cover;        /* Corta ou ajusta a imagem para caber no espaço */
+  border-radius: 8px;
+}
+
+
+
+#data{
+  margin-right: 30px;
+}
+
+/* Estilo geral para o container da recomendação */
+.container-recommendations {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin: 0;
+  padding: 1rem; /* Melhorando o padding para dar espaço interno */
+  box-sizing: border-box;
+}
+
+/* Estilo para o container das recomendações */
+.recommendation-card {
+  display: flex;
+  flex-direction: row; /* Foto à esquerda e informações à direita */
+  align-items: flex-start;
+  background-color: #000000;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border-radius: 0.75rem;
+  border: 1px solid #edf2f7;
+  max-width: 600px;
+  margin: 0 auto;
+  min-height: 180px; /* Altura mínima consistente */
+  overflow: hidden;
+  padding: 1rem; /* Adicionando padding para separar o conteúdo */
+  gap: 1rem; /* Espaçamento entre a foto e as informações */
+  transition: all 0.3s ease; /* Suavizando a transição */
+}
+
+.recommendation-card:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2); /* Efeito de hover para card */
+  transform: translateY(-5px); /* Leve efeito de elevação */
+}
+
+/* Estilo para a foto do usuário */
+.user-photo {
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Estilo para as informações do usuário */
+.user-info {
+  flex-grow: 1; /* Faz com que a área de informações ocupe o restante do espaço */
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  cursor: pointer;
+}
+
+.user-name-reco {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #000000;
+  display: flex;
+  align-items: center;
+}
+
+.verification-icon {
+  width: 16px;
+  height: 16px;
+  margin-left: 0.5rem;
+}
+
+.user-title {
+  font-size: 1rem;
+  color: #cbd5e0;
+}
+/* 
+.show-comentario {
+  width: 250px;
+  height: auto;
+  position: absolute;
+  left: 58%;
+  margin: 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);  /* Sombra suave */
+  /* padding: 16px; */
+/* } */ */
+
+.vertical-line {
+  border: none;         /* Remove as bordas padrão */
+  border-left: 2px solid #fcfcfc; /* Cria a linha vertical */
+  height: 350px;        /* Altura da linha */
+  margin: 0 auto;       /* Centraliza a linha, opcional */
+}
+
+
+/* Estilo para os posts dentro de cada recomendação */
+.post-info {
+  background-color: #2d3748;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  margin-top: 1rem;
+  color: #edf2f7;
+  flex-grow: 0; /* Evitar que o post-info cresça além do necessário */
+  min-height: 50px; /* Garantir que haja um tamanho mínimo para o post */
+  overflow: hidden; /* Para não sair do contêiner */
+  text-overflow: ellipsis; /* Caso o conteúdo seja muito longo */
+  white-space: nowrap; /* Impedir quebras de linha no conteúdo */
+}
+
+
+/* Foto do usuário */
+.user-photo {
+  width: 5rem;
+  height: 5rem;
+  border-radius: 9999px;
+  object-fit: cover;
+  border: 2px solid #ffffff;
+  flex-shrink: 0; /* Garante que a imagem não seja reduzida */
+}
+
+/* Informações do usuário */
+.user-info {
+  margin-left: 1rem;
+  flex-grow: 1; /* Permite que o conteúdo ocupe o espaço restante */
+  overflow: hidden; /* Esconde qualquer conteúdo que ultrapasse a largura */
+  min-width: 0; /* Necessário para truncamento funcionar corretamente */
+}
+
+
+
+
+/* Ícone de verificação */
+.verification-icon {
+  width: 1.2rem;
+  height: 1.2rem;
+  margin-left: 0.5rem;
+  flex-shrink: 0; /* Garante que o ícone nunca reduza de tamanho */
+}
+
+/* Ajuste geral do layout */
+.recommendation-card > * {
+  flex-shrink: 0; /* Impede distorção do layout */
+}
+
+
+/* BTN de posts apenas em computadores sem o nav bar */
+/* Ocultar o botão em telas menores que 768px (dispositivos móveis e tablets) */
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none;
+  }
+}
+
+/* Container do modal */
+.modal-container {
+  display: none; /* Inicialmente escondido */
+  justify-content: center; /* Centraliza horizontalmente */
+  align-items: center; /* Centraliza verticalmente */
+  position: fixed;
+  top: -15%;
+  left: 25%; /* Mantém o modal deslocado 25% da esquerda */
+  height: 100vh;
+  width: 75vw; /* Ajusta a largura do container para corresponder ao left */
+  background-color: rgba(0, 0, 0, 0.6); /* Fundo escurecido, mais opaco */
+  z-index: 1000;
+  transition: all 0.3s ease-in-out; /* Suaviza a exibição */
+}
+
+/* Modal em si */
+.modal {
+  margin-top: 15px;
+  background-color: rgb(255, 255, 255); /* Fundo branco, mais limpo */
+  width: 90%; /* Responsivo: ocupa até 90% da largura */
+  max-width: 600px; /* Largura máxima */
+  height: auto; /* Altura automática */
+  max-height: 500px; /* Altura máxima */
+  padding: 20px; /* Espaçamento interno */
+  border-radius: 12px; /* Bordas suavemente arredondadas */
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4); /* Sombra mais elegante */
+  overflow-y: auto; /* Scroll se o conteúdo exceder a altura */
+  transform: scale(0.95); /* Levemente encolhido no início */
+  transition: all 0.3s ease; /* Suaviza animações */
+  top: 25%;
+  
+
+}
+
+/* Ativar o modal */
+.modal-container.active {
+  display: flex; /* Mostra o modal */
+}
+
+.modal-container.active .modal {
+  transform: scale(1); /* Anima o crescimento */
+}
+
+/* Ajustes para dispositivos menores */
+@media (max-width: 768px) {
+  .modal {
+    width: 95%; /* Maior largura em telas pequenas */
+    max-height: 80%; /* Limita a altura para telas pequenas */
+  }
+
+  .modal-container {
+    left: 0; /* Alinha ao centro em telas menores */
+    width: 100vw; /* Ocupa toda a largura */
+  }
+}
