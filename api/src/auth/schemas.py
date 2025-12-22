@@ -1,7 +1,9 @@
 # auth/schemas.py
-from pydantic import BaseModel, EmailStr, field_validator, ConfigDict
-from typing import Optional, List
 from datetime import datetime
+from typing import List, Optional
+
+from pydantic import BaseModel, ConfigDict, EmailStr, field_validator
+
 from src.auth.models import User
 
 
@@ -19,6 +21,7 @@ class SystemUser(BaseModel):
 class Token(BaseModel):
     access_token: str
     token_type: str
+
 
 class TokenData(BaseModel):
     scopes: str

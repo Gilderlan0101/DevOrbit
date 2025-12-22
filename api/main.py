@@ -7,24 +7,24 @@ import uvicorn
 from dotenv import load_dotenv
 from fastapi import Depends, FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
-from src.database.init_database import init_database, close_database
-from src.global_utils.i_request import permitted_origin
 
-load_dotenv(dotenv_path=Path(__file__).parent / '.env.local')
+from src.database.init_database import close_database, init_database
+from src.global_utils.i_request import permitted_origin
+from src.incuid_routes.routes import register_all_routes as routes
+
+load_dotenv()
 
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     load_dotenv()
     await init_database()
-    print("Banco de dados inicializado")
+    print('Banco de dados inicializado')
 
     yield
 
     await close_database()
-    print("Banco de dados desconectado")
-
-
+    print('Banco de dados desconectado')
 
 
 class Main:
@@ -42,7 +42,7 @@ class Main:
         Atualmente servindo NEXT.js
         """
 
-        origins = ['http://127.0.0.1:3000']   # Atualmente apenas um destino
+        origins = ['http://127.0.0.1:8000']   # Atualmente apenas um destino
         self.app.add_middleware(
             CORSMiddleware,
             allow_origins=origins,
@@ -56,6 +56,9 @@ class Main:
         Para manter a elegancia do codigo vamos carregar
         todas as rotas a partir de uma função externa.
         """
+
+        # Função que carrega todas as rotas
+        routes(app=self.app)
 
         # Rota default para testar a api.
         @self.app.get('/health')
@@ -71,9 +74,6 @@ class Main:
                 'service': 'FastAPI',
                 'allowed_origin': request.headers.get('host', 'Host'),
             }
-
-        from src.auth.router import router as register
-        self.app.include_router(register)
 
     def run(self, host: str = '0.0.0.0', port: int = 8000):
         """Inicia o servidor

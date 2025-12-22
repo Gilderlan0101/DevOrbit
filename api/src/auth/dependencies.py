@@ -6,10 +6,11 @@ from fastapi import Depends, HTTPException, Security, status
 from fastapi.security import SecurityScopes
 from jwt.exceptions import InvalidTokenError
 from pydantic import ValidationError
+
 from src.auth.config import ALGORITHM, SECRET_KEY, auth2_scheme
+from src.auth.models import User as db
 from src.auth.schemas import TokenData
 from src.auth.utils import get_user
-from src.global_models.user import User as db
 
 
 async def get_current_user(
@@ -29,7 +30,9 @@ async def get_current_user(
         )
 
     try:
-        payload = jwt.decode(token, str(SECRET_KEY), algorithms=[ALGORITHM])
+        payload = jwt.decode(
+            token, str(SECRET_KEY), algorithms=[str(ALGORITHM)]
+        )
         username = payload.get('sub')
         if username is None:
             raise credentials_exception   # type: ignore

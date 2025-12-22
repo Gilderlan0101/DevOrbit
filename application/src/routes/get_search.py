@@ -3,6 +3,7 @@ from application.src.models.search import SearchData
 
 query = Blueprint('search', __name__)
 
+
 @query.route('/search', methods=['POST'])
 def search():
     query_text = request.json.get('query', '')

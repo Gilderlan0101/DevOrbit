@@ -21,7 +21,7 @@ from application.src.services.user_service import (
 
 
 # Configuração do Blueprint
-home_ = Blueprint("home", __name__, template_folder="templates")
+home_ = Blueprint('home', __name__, template_folder='templates')
 
 
 @login_required
@@ -30,10 +30,10 @@ def make_cache_key():
     Gera uma chave única de cache para cada usuário logado.
     Combina o ID do usuário e o caminho da requisição.
     """
-    return f"{current_user.id}:{request.path}"
+    return f'{current_user.id}:{request.path}'
 
 
-@home_.route("/devorbit/feed/", methods=["POST", "GET"])
+@home_.route('/devorbit/feed/', methods=['POST', 'GET'])
 @cache.cached(timeout=100, key_prefix=make_cache_key)
 def home_page():
     try:
@@ -43,24 +43,24 @@ def home_page():
 
         if (
             not isinstance(data, dict)
-            or "todos_os_posts" not in data
-            or "post_banner" not in data
+            or 'todos_os_posts' not in data
+            or 'post_banner' not in data
         ):
-            return redirect(url_for("errorHttp.page_erro"))
+            return redirect(url_for('errorHttp.page_erro'))
 
-        posts = data["todos_os_posts"]  # Get the posts
-        post_banner = data["post_banner"]
+        posts = data['todos_os_posts']  # Get the posts
+        post_banner = data['post_banner']
 
         # Buscando informações do usuário logado
         user_data = get_user_info(current_user.id)
         if not user_data:
             clear_terminal()
-            logging.info("usuario não encotrado.")
-            return redirect(url_for("home.home_page"))
+            logging.info('usuario não encotrado.')
+            return redirect(url_for('home.home_page'))
 
-        username = user_data.get("username")
-        user_id = user_data.get("id")
-        photo_user_profile = user_data.get("user_photo", None)
+        username = user_data.get('username')
+        user_id = user_data.get('id')
+        photo_user_profile = user_data.get('user_photo', None)
 
         # 1. Chama a função `dataRequests()` para obter os dados da API ou
         #  banco de dados,
@@ -71,7 +71,7 @@ def home_page():
         #  "todos_os_posts".
         # Isso garante que a variável `posts` contenha apenas a lista de posts
         #  para ser processada.
-        posts = var["todos_os_posts"]  # Extrai apenas os posts
+        posts = var['todos_os_posts']  # Extrai apenas os posts
         # 3. Envia a lista de posts para a função
         # `enrich_posts_with_user_info()`,
         # que adiciona informações adicionais aos comentários, como nome e foto
@@ -79,18 +79,14 @@ def home_page():
         # O resultado enriquecido é armazenado em `enriched_posts`.
         enriched_posts = enrich_posts_with_user_info(posts)
 
-
-       
-
-
         recommendations = recommendationsUser()  # Prepare recomendações
         likes = [
-            post["likes"] for post in posts if post["likes"] >= 0
+            post['likes'] for post in posts if post['likes'] >= 0
         ]  # Filtros ou lógica adicional para os posts
 
         if current_user.is_authenticated:
             return render_template(
-                "home.html",
+                'home.html',
                 username=username,
                 usuario=current_user.username,
                 photo_user_profile=photo_user_profile,
@@ -104,7 +100,7 @@ def home_page():
             )
         else:
             return render_template(
-                "home.html",
+                'home.html',
                 id=user_id,
                 posts=posts,
                 post_banner=post_banner,
@@ -115,30 +111,29 @@ def home_page():
         # Capture traceback for deeper debugging
         clear_terminal()
         error_message = (
-            f"Error loading homepage: {e.__class__.__name__} - {str(e)}"
+            f'Error loading homepage: {e.__class__.__name__} - {str(e)}'
         )
         stack_trace = traceback.format_exc()
-        
 
         # Log critical error with traceback
-        logging.critical(f"{error_message}\n{stack_trace}")
+        logging.critical(f'{error_message}\n{stack_trace}')
 
         # Optionally log more details, such as the request URL or user info
-        logging.critical(f"Request URL: {request.url}")
+        logging.critical(f'Request URL: {request.url}')
         logging.critical(
-            "User ID: "
+            'User ID: '
             + str(
                 current_user.id
                 if current_user.is_authenticated
-                else "Not authenticated"
+                else 'Not authenticated'
             )
         )
 
         # Return to error page or render a custom message
-        return redirect(url_for("errorHttp.page_erro"))
+        return redirect(url_for('errorHttp.page_erro'))
 
     except httpx.exceptions.InvalidURL as erro:
         clear_terminal()
         logging.info(erro)
         logging.info(erro.__name__.__class__)
-        return redirect(url_for("home_home_page"))
+        return redirect(url_for('home_home_page'))

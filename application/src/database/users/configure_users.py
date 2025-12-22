@@ -4,8 +4,6 @@
 # from application.src.models.modelsUser import (Cadastro, Login, Links, UserInformation)
 
 
-
-    
 # def my_db():
 #     banco = sqlite3.connect('usuarios.db')
 #     return banco, banco.cursor()
@@ -27,7 +25,7 @@
 #         site TEXT NULL
 #         )'''
 #     )
-   
+
 
 #      # Criação da tabela `user_information` com relação ao `usuarios`
 #      # Essas duas TABELAS devem continua tendo relação com o id , para buscar as infor do usuario etc..
@@ -43,50 +41,50 @@
 #     )
 #     banco.commit()
 #     banco.close()
-    
+
 # def add_user(cadastro: Cadastro):
 #     banco, cursor = my_db()
-    
+
 #     try:
 #         # Gerar o hash da senha
 #         senha_hash = generate_password_hash(cadastro.password).decode('utf-8')
-        
+
 #         # Inserir na tabela `usuarios`
 #         cursor.execute('''
 #         INSERT INTO usuarios (name, last_name, email, age, password)
 #         VALUES (?, ?, ?, ?, ?)
 #         ''', (cadastro.name, cadastro.last_name, cadastro.email, cadastro.age, senha_hash))
-        
+
 #         # Confirmar as transações
 #         banco.commit()
-    
+
 #     except Exception as e:
 #         banco.rollback()
 #         print(f"Erro ao adicionar usuário: {e}")
-    
+
 #     finally:
 #         banco.close()
 
 
 # def add_user_information(user: UserInformation):
 #     banco, cursor = my_db()
-    
+
 #     try:
 #         # Inserir na tabela `user_information`
 #         cursor.execute('''
 #         INSERT INTO user_information (name, username, email, occupation)
 #         VALUES (?, ?, ?, ?)
 #         ''', (user.name, user.username, user.email, user.occupation))
-        
+
 #         # Confirmar as transações
 #         banco.commit()
 #         print("Usuário adicionado com sucesso!")
 #         print("Usuário adicionado com sucesso!")
-    
+
 #     except Exception as e:
 #         banco.rollback()
 #         print(f"Erro ao adicionar informações do usuário: {e}")
-    
+
 #     finally:
 #         banco.close()
 
@@ -111,7 +109,7 @@
 # # add column e usada para cria novas coluunas teste, para não precisar excluir o banco
 # def add_column():
 #     banco, cursor = my_db()
-    
+
 #     # Verifica se a coluna 'bio' já existe
 #     cursor.execute("PRAGMA table_info(usuarios)")
 #     columns = [column[1] for column in cursor.fetchall()]  # Obtém todos os nomes das colunas
@@ -120,7 +118,7 @@
 #         # Adiciona a coluna 'bio' à tabela 'usuarios'
 #         cursor.execute("ALTER TABLE usuarios ADD COLUMN bio TEXT")
 #         banco.commit()
-       
+
 #     else:
 #         pass
 #     if 'followers' not in columns:
@@ -135,7 +133,7 @@
 #         # add following
 #         cursor.execute("ALTER TABLE usuarios ADD COLUMN following INTEGER DEFAULT 0")
 #         banco.commit()
-        
+
 #     else:
 #         pass
 
@@ -143,7 +141,7 @@
 #         # banner de perfil do usuario
 #         cursor.execute("ALTER TABLE usuarios ADD COLUMN banner TEXT")
 #         banco.commit()
-    
+
 #     else:
 #         pass
 
@@ -153,7 +151,6 @@
 #     else:
 #         pass
 
-   
 
 #     banco.close()
 
@@ -173,8 +170,6 @@
 #         print(f"Erro ao acessar o banco de dados: {e}")
 #     finally:
 #         banco.close()
-
-
 
 
 # class User(UserMixin):

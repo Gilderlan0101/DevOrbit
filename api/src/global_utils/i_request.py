@@ -1,4 +1,5 @@
-from fastapi import Request, HTTPException, status
+from fastapi import HTTPException, Request, status
+from src.auth.models import User as db
 
 def permitted_origin(request: Request):
     """Verifica a origem da requisição em rotas públicas."""
@@ -7,9 +8,7 @@ def permitted_origin(request: Request):
     origin = request.headers.get('origin')
 
     # TODO: Adiciona rota para o front end
-    allowed_origins = [
-        'http://localhost:8000',
-    ]
+    allowed_origins = ['http://localhost:8000', 'http://127.0.0.1:8000']
 
     if origin is None:
         # Para requisições do mesmo origin (mesmo domínio), o cabeçalho origin pode não ser enviado
@@ -18,6 +17,7 @@ def permitted_origin(request: Request):
         if referer:
             # Extrair origem do referer
             import re
+
             match = re.match(r'(https?://[^/]+)', referer)
             if match:
                 origin = match.group(1)
@@ -41,3 +41,14 @@ def permitted_origin(request: Request):
         )
 
     return True
+
+
+async def get_user(db, username: str) -> db | None:
+    """get_user: Verifica se temos um usúario com o email
+    fornecido no paramentro username. Se o email estive cadastrado,
+    a função deve retorna os dados desse usuario."""
+
+    user = await db.filter(email=username).first()
+    if not user or not user.status:
+        return None
+    return user

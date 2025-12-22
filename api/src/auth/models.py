@@ -1,8 +1,10 @@
-from tortoise import fields, models
-from tortoise.contrib.pydantic import pydantic_model_creator
-from src.global_utils.id_generator import generate_short_id as ID_default
 import datetime
 
+from tortoise import fields, models
+from tortoise.contrib.pydantic import pydantic_model_creator
+
+from src.global_utils.id_generator import generate_short_id as ID_default
+from src.post.models import Posts
 
 class User(models.Model):
     """Tabela principal de usuários (equivalente a 'usuarios')"""
@@ -25,7 +27,7 @@ class User(models.Model):
         auto_now_add=True, default=datetime.datetime.now
     )
     updated_at = fields.DatetimeField(auto_now=True)
-    status = fields.BooleanField(default=True)
+    status = fields.BooleanField(default=False)
     is_first_login = fields.BooleanField(default=True)
 
     # Bio e estatísticas
@@ -37,10 +39,11 @@ class User(models.Model):
     github = fields.TextField(null=True)
     linkedin = fields.TextField(null=True)
     website = fields.TextField(null=True)
+    temporary_code = fields.IntField(null=True, default=None)
 
     # Relacionamento 1:1 com UserInformation
     user_info: fields.OneToOneRelation['UserInformation']
-
+    posts: fields.ReverseRelation['Posts']
     # Relacionamento 1:N com outras redes sociais
     other_social_networks: fields.ReverseRelation['OtherSocialNetwork']
 
