@@ -48,9 +48,6 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
     """create_access_token: Cria um token valido para o usúario."""
     try:
 
-        print("-"*30)
-        print(data)
-        print("-"*30)
 
 
         to_encode = data.copy()
