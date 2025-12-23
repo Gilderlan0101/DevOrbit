@@ -37,7 +37,9 @@ async def get_user(db, username: str) -> db | None:
     a função deve retorna os dados desse usuario."""
 
     user = await db.filter(email=username).first()
-    if not user or not user.status:
+    if not user:
+        print(user, type(user))
+        breakpoint()
         return None
     return user
 
@@ -65,7 +67,7 @@ def create_access_token(data: dict, expires_delta: timedelta | None = None):
 
         to_encode.update({
             'exp': expire,
-            "scope": "email:send user:read",
+            "scope": "email:send user:read user:write",
             })
 
         encode_jwt = jwt.encode(

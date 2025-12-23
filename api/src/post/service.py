@@ -82,9 +82,9 @@ class PostService:
         except Exception:
             raise
 
-    async def post_create(self, data: dict, user_id: str = "476347", **kwargs):
+    async def post_create(self, data: dict, user_id: int, username: str):
         try:
-            security_verification = await get_user(db=db, username='joao.siilva@example.com')
+            security_verification = await get_user(db=db,  username=username)
 
             if not security_verification:
                 raise HTTPException(

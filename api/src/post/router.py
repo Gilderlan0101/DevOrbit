@@ -1,12 +1,15 @@
-from fastapi import APIRouter, Depends, HTTPException, status
+from fastapi import APIRouter, Depends, HTTPException,  status, Security
 from src.post.schemas import CreatePost
 from src.post.service import PostService
 from src.global_utils.i_request import permitted_origin
+from src.auth.dependencies import get_current_active_user, get_current_user
+from src.auth.schemas import SystemUser
 
 router = APIRouter(tags=['CRUD_POST'], prefix='/devorbit')
 
+# Public
 @router.get('/feed/posts/', summary="Buscar todos os posts")
-async def get_all_posts(origin: bool = Depends(permitted_origin)):
+async def get_all_posts(origin: bool = Depends(permitted_origin),):
     try:
         post_service = PostService()
         posts = await post_service.get_posts_formatted()
@@ -33,19 +36,32 @@ async def get_all_posts(origin: bool = Depends(permitted_origin)):
 @router.post('/create/posts/', summary="Criar novo post")
 async def send_posts_in_community(
     data: CreatePost,
-    origin: bool = Depends(permitted_origin
-    )):
+    origin: bool = Depends(permitted_origin),
+    current_user: SystemUser = Security(get_current_user, scopes=[ "user:write"]),
+    ):
 
     init_service = PostService()
-    var = await init_service.post_create(data=dict(data))
+
+    var = await init_service.post_create(
+        data=dict(data), user_id=current_user.id, username=current_user.email
+        )
+
     return var
 
 @router.delete('/delete_posts', summary="Deletar post")
-async def deleted_posts(origin: bool = Depends(permitted_origin)):
+async def deleted_posts(
+    origin: bool = Depends(permitted_origin),
+    current_user: SystemUser = Security(get_current_user, scopes=["user:write"]),
+    ):
+
     init_service = PostService()
     var = await init_service.delete_post(user_id="476347", post_id="768498")
     return var
 
-@router.put('/upgrade_posts', summary="Atualizar post")
-async def upgrade_posts_for_user(origin: bool = Depends(permitted_origin)):
+@router.put('/upgrade_posts/{post_id}',  summary="Atualizar post")
+async def upgrade_posts_for_user(
+    post_id: int,
+    origin: bool = Depends(permitted_origin),
+    current_user: SystemUser = Security(get_current_user, scopes=["user:write"]),
+    ):
     pass

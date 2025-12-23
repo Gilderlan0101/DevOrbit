@@ -17,16 +17,15 @@ async def get_current_user(
     security_scopes: SecurityScopes,
     token: Annotated[str, Depends(oauth2_scheme)],
 ):
-    print("=== DEBUG: ENTROU EM get_current_user ===")  # ← NOVO
-    # CORREÇÃO: Definir authenticate_value e credentials_exception ANTES das condições
+
+
     authenticate_value = "Bearer"
-    print(security_scopes.scope_str)
-    print(security_scopes.scopes)
-    print(dir(security_scopes))
 
     # Adicionar scopes se existirem
     if security_scopes.scopes:
         authenticate_value = f'Bearer scope={security_scopes.scope_str}'
+        print(authenticate_value)
+
 
     # Criar exceção de credenciais (agora sempre definida)
     credentials_exception = HTTPException(
@@ -36,16 +35,12 @@ async def get_current_user(
     )
 
     try:
-        payload = jwt.decode(token, str(SECRET_KEY), algorithms=[str(ALGORITHM)])
+        payload = jwt.decode(token, str(SECRET_KEY), algorithms=ALGORITHM)
         username = payload.get("sub")
 
-        print("_________USERNAME_____________")
-        print(username)
-        print("_________PAYLOAD_____________")
-        print(payload)
-
-
         if username is None:
+            locals()
+            #breakpoint()
             raise credentials_exception
 
         scope = payload.get("scope", "")
@@ -53,13 +48,12 @@ async def get_current_user(
         print(token_scopes)
         token_data = TokenData(scopes=token_scopes, username=username)
 
-    except (JWTError, ValidationError):
+    except (JWTError, ValidationError) as e:
         raise credentials_exception
 
     # Buscar usuário no banco de dados
-    user = get_user(db, username=token_data.username)
+    user =  await get_user(db, username=token_data.username)
     if user is None:
-        print("______________GET_USER_IS_NONE__________")
         raise credentials_exception
 
     # Verificar scopes
@@ -70,6 +64,7 @@ async def get_current_user(
                 detail="Not enough permissions",
                 headers={"WWW-Authenticate": authenticate_value},
             )
+
 
     return user
 

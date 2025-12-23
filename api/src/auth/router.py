@@ -63,9 +63,6 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
         data={'sub': user.email, 'scope': "email:send user:read"},
         expires_delta=acess_token_expires,
     )
-    print("-"*20)
-    print(access_token)
-    print("-"*20)
 
 
     user_data = UserBasicResponse(
