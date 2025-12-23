@@ -13,8 +13,14 @@ ACCESS_TOKEN_EXPIRE_MINUTES = 30   # TODO: Altera para 8 horas
 
 passwor_hash = PasswordHash.recommended()
 
-auth2_scheme = OAuth2PasswordBearer(
-    tokenUrl='token', scopes={'me': 'Read information about the current user'}
+oauth2_scheme = OAuth2PasswordBearer(
+    tokenUrl='auth/login',
+    scopes={
+        "user:read": "Ler informações do usuário",
+        "user:write": "Modificar informações do usuário",
+        "email:send": "Enviar emails",
+        "admin": "Acesso administrativo completo",
+    }
 )
 
 
