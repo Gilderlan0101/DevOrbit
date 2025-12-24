@@ -16,11 +16,11 @@ passwor_hash = PasswordHash.recommended()
 oauth2_scheme = OAuth2PasswordBearer(
     tokenUrl='auth/login',
     scopes={
-        "user:read": "Ler informações do usuário",
-        "user:write": "Modificar informações do usuário",
-        "email:send": "Enviar emails",
-        "admin": "Acesso administrativo completo",
-    }
+        'user:read': 'Ler informações do usuário',
+        'user:write': 'Modificar informações do usuário',
+        'email:send': 'Enviar emails',
+        'admin': 'Acesso administrativo completo',
+    },
 )
 
 

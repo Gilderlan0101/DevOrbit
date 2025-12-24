@@ -1,5 +1,7 @@
 from fastapi import HTTPException, Request, status
+
 from src.auth.models import User as db
+
 
 def permitted_origin(request: Request):
     """Verifica a origem da requisição em rotas públicas."""
@@ -49,6 +51,6 @@ async def get_user(db, username: str) -> db | None:
     a função deve retorna os dados desse usuario."""
 
     user = await db.filter(email=username).first()
-    if not user or not user.status:
+    if not user:
         return None
     return user

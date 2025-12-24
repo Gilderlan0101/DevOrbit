@@ -2,7 +2,7 @@ from datetime import timedelta
 from os import access
 from typing import Annotated
 
-from fastapi import APIRouter, Depends, HTTPException, status, Security
+from fastapi import APIRouter, Depends, HTTPException, Security, status
 from fastapi.security import OAuth2PasswordRequestForm
 
 from src.auth.config import ACCESS_TOKEN_EXPIRE_MINUTES
@@ -60,10 +60,9 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
         )
     acess_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
     access_token = create_access_token(
-        data={'sub': user.email, 'scope': "email:send user:read"},
+        data={'sub': user.email, 'scope': 'email:send user:read'},
         expires_delta=acess_token_expires,
     )
-
 
     user_data = UserBasicResponse(
         id=user.id,
@@ -91,7 +90,9 @@ async def login(form_data: Annotated[OAuth2PasswordRequestForm, Depends()]):
 # Para o email doo usuario
 @router.post('/pull_code_email')
 async def pull_code_email(
-    current_user: SystemUser = Security(get_current_user, scopes=[ "email:send"]),
+    current_user: SystemUser = Security(
+        get_current_user, scopes=['email:send']
+    ),
     origin: bool = Depends(permitted_origin),
 ):
 

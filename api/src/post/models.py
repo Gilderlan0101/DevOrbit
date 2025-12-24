@@ -2,9 +2,10 @@
 from datetime import datetime
 from zoneinfo import ZoneInfo
 
-from src.global_utils.id_generator import generate_short_id as ID_default
 from tortoise import fields, models
 from tortoise.signals import pre_save
+
+from src.global_utils.id_generator import generate_short_id as ID_default
 
 
 class Posts(models.Model):

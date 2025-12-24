@@ -6,6 +6,7 @@ from tortoise.contrib.pydantic import pydantic_model_creator
 from src.global_utils.id_generator import generate_short_id as ID_default
 from src.post.models import Posts
 
+
 class User(models.Model):
     """Tabela principal de usuários (equivalente a 'usuarios')"""
 
