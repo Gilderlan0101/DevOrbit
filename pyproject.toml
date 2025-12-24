@@ -7,8 +7,7 @@ license = "MIT"
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python-dev = "python-dev-is-python3" 
-python = ">=3.9,<4.0"
+python = ">=3.10,<4.0"
 sqlalchemy = ">=2.0.37,<3.0.0"
 python-multipart = ">=0.0.20,<0.0.21"
 asgiref = ">=3.8.1,<4.0.0"
@@ -26,7 +25,13 @@ flask-bcrypt = "^1.0.1"
 httpx = "^0.28.1"
 email-validator = "^2.2.0"
 uvicorn = "^0.34.0"
-
+blue = "^0.9.1"
+tortoise = "^0.1.1"
+tortoise-orm = "^0.25.2"
+jwt = "^1.4.0"
+pwdlib = {extras = ["argon2"], version = "^0.3.0"}
+pyjwt = "^2.10.1"
+isort = "^7.0.0"
 [build-system]
 requires = ["poetry-core>=2.0.0,<3.0.0"]
 build-backend = "poetry.core.masonry.api"

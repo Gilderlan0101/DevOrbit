@@ -31,7 +31,7 @@ cache = Cache()
 
 # Função para obter a conexão com o banco de dados
 def get_db_connection():
-    return sqlite3.connect("usuarios.db")
+    return sqlite3.connect('usuarios.db')
 
 
 # Classe User com suporte ao Flask-Login | Podemos add novos paramentros ex:
@@ -46,7 +46,7 @@ class User(UserMixin):
         conn = get_db_connection()
         cursor = conn.cursor()
         cursor.execute(
-            "SELECT id, name FROM usuarios WHERE id = ?", (user_id,)
+            'SELECT id, name FROM usuarios WHERE id = ?', (user_id,)
         )
         user = cursor.fetchone()
         conn.close()
@@ -58,38 +58,38 @@ class User(UserMixin):
 
 def create_app():
     logging.basicConfig(
-        level=logging.DEBUG, format="%(levelname)s: %(message)s"
+        level=logging.DEBUG, format='%(levelname)s: %(message)s'
     )
     # Criando a aplicação Flask
 
-    app = Flask(__name__, static_url_path="/static")
-    root_project_path = app.root_path + "/../../"
+    app = Flask(__name__, static_url_path='/static')
+    root_project_path = app.root_path + '/../../'
     print(root_project_path)
 
-    load_dotenv(dotenv_path=root_project_path + ".env")
-    if os.path.exists(root_project_path + ".env.local"):
-        print(os.getenv("API_NOTICIA"))
-        print(os.getenv("API"))
-        load_dotenv(root_project_path + ".env.local", override=True)
+    load_dotenv(dotenv_path=root_project_path + '.env')
+    if os.path.exists(root_project_path + '.env.local'):
+        print(os.getenv('API_NOTICIA'))
+        print(os.getenv('API'))
+        load_dotenv(root_project_path + '.env.local', override=True)
 
-    app.config["DEBUG"] = os.getenv("DEBUG")
-    app.config["SECRET_KEY"] = os.getenv("KEY")
-    app.config["CACHE_TYPE"] = os.getenv("CACHE")
-    app.config["UPLOAD_FOLDER"] = os.path.abspath(
-        "application/src/static/banners"
+    app.config['DEBUG'] = os.getenv('DEBUG')
+    app.config['SECRET_KEY'] = os.getenv('KEY')
+    app.config['CACHE_TYPE'] = os.getenv('CACHE')
+    app.config['UPLOAD_FOLDER'] = os.path.abspath(
+        'application/src/static/banners'
     )
 
     app.add_url_rule(
-        "/files/<filename>",
-        endpoint="files",
+        '/files/<filename>',
+        endpoint='files',
         view_func=send_from_directory,
-        defaults={"directory": caminho_img},
+        defaults={'directory': caminho_img},
     )
-    os.makedirs(app.config["UPLOAD_FOLDER"], exist_ok=True)
+    os.makedirs(app.config['UPLOAD_FOLDER'], exist_ok=True)
 
     # CORS para API interna e externa
-    CORS(app, supports_credentials=True, resources={r"/*": {"origins": "*"}})
-    logging.debug("CORS configurado com sucesso.")
+    CORS(app, supports_credentials=True, resources={r'/*': {'origins': '*'}})
+    logging.debug('CORS configurado com sucesso.')
     # hashing = Bcrypt(app)
 
     # Registrar blueprints | Devem sergui desta forma,
@@ -153,7 +153,7 @@ def create_app():
     login_manager.init_app(app)
 
     # Pagina padrão de login
-    login_manager.login_view = "login.login_page"
+    login_manager.login_view = 'login.login_page'
 
     @login_manager.user_loader
     def load_user(user_id):
@@ -161,55 +161,55 @@ def create_app():
 
     api = Api(
         app,
-        version="1.0",
-        title="API da Aplicação",
-        description="Endpoints REST com Flask-RESTx",
+        version='1.0',
+        title='API da Aplicação',
+        description='Endpoints REST com Flask-RESTx',
     )
     register_file_routes(api)
 
     # Configuração de cache
     cache.init_app(app)
     CONFIG = {
-        "DEBUG:": True,
-        "CACHE_DEFAULT_TIMEOUT": 300,
-        "CACHE_NO_NULL_WARNING": True,
+        'DEBUG:': True,
+        'CACHE_DEFAULT_TIMEOUT': 300,
+        'CACHE_NO_NULL_WARNING': True,
     }
     app.config.update(CONFIG)
 
     # Logs iniciais para monitoramento | Limpando o teminal
     # para visualizar erros
-    logging.info("Inicializando aplicação Flask...")
+    logging.info('Inicializando aplicação Flask...')
     time.sleep(1)
-    logging.info("Realizando verificações iniciais...")
+    logging.info('Realizando verificações iniciais...')
     time.sleep(1)
-    if os.system == "nt":
-        os.system("cls")
+    if os.system == 'nt':
+        os.system('cls')
     else:
-        os.system("clear")
+        os.system('clear')
 
     logging.info(
-        "Tela limpa com sucesso. A aplicação está pronta para iniciar!"
+        'Tela limpa com sucesso. A aplicação está pronta para iniciar!'
     )
     time.sleep(1)
     # Continue com a inicialização do seu aplicativo Flask
-    logging.info("Iniciando servidor Flask...")
-    if os.system == "nt":
-        os.system("cls")
+    logging.info('Iniciando servidor Flask...')
+    if os.system == 'nt':
+        os.system('cls')
     else:
-        os.system("clear")
-    logging.info("Iniciando servidor Flask ( 200 )...")
+        os.system('clear')
+    logging.info('Iniciando servidor Flask ( 200 )...')
 
     # Podemos melhorar
     @app.errorhandler(404)
     def page_not_found(e):
         return (
-            "Página não encontrada",
+            'Página não encontrada',
             404,
         )  # talves uma pagina de erro html 404
 
     # Podemos melhorar
     @app.errorhandler(500)
     def special_exception_handler(error):
-        return "Erro interno do servidor", 500
+        return 'Erro interno do servidor', 500
 
     return app

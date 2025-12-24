@@ -15,15 +15,15 @@ from application.src.database.users.configure_users import (
 )
 from application.src.models.modelsUser import Login
 
-login_ = Blueprint("login", __name__, template_folder="templates")
+login_ = Blueprint('login', __name__, template_folder='templates')
 
 
 @cache.cached(timeout=5)
-@login_.route("/devorbit/login/", methods=["POST", "GET"])
+@login_.route('/devorbit/login/', methods=['POST', 'GET'])
 def login_page():
-    if request.method == "POST":
-        email = request.form.get("email")
-        password = request.form.get("password")
+    if request.method == 'POST':
+        email = request.form.get('email')
+        password = request.form.get('password')
         # remember_me = request.form['remember_me']
         # futuramente salva o usuario na session para não precisa
         # realiza login novamente
@@ -39,15 +39,15 @@ def login_page():
             login_user(user)
 
             # Adiciona informações do usuário na sessão
-            session["user"] = {
-                "name": current_user.username,
-                "id": current_user.id,
+            session['user'] = {
+                'name': current_user.username,
+                'id': current_user.id,
             }
 
             # Redireciona para a página desejada ou para a home
-            next_page = session.get("next", url_for("home.home_page"))
+            next_page = session.get('next', url_for('home.home_page'))
             return redirect(next_page)
         else:
-            return redirect(url_for("login.login_page"))
+            return redirect(url_for('login.login_page'))
 
-    return render_template("login.html")
+    return render_template('login.html')

@@ -1,7 +1,7 @@
 import os
 from pathlib import Path
-from dotenv import load_dotenv
 
+from dotenv import load_dotenv
 
 load_dotenv()
 
@@ -21,6 +21,7 @@ TORTOISE_CONFIG = {
         "models": {
             "models": [
                 "src.auth.models",
+                "src.post.models",
                 # "src.auth.models",
                 # "src.posts.models",
             ],

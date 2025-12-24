@@ -9,8 +9,10 @@ class Post(BaseModel):
     - nome: Nome do usuário.
     - img_path: Caminho da imagem associada ao post (opcional).
     """
+
     nome: str  # Nome do autor
     img_path: str = None  # Caminho da imagem (opcional)
+
 
 def banco_post():
     """
@@ -53,7 +55,7 @@ def criando_post(novo_post: Post):
             INSERT INTO post_do_usuario (nome, img_path)
             VALUES (?, ?)
             """,
-            (novo_post.nome, novo_post.img_path)
+            (novo_post.nome, novo_post.img_path),
         )
         banco.commit()
         return cursor.lastrowid  # Retorna o ID do novo post criado

@@ -1,3 +1,6 @@
+<<<<<<< HEAD
+brach master
+=======
 # **DevOrbit Community**  
 🌌 **Bem-vindo(a) à DevOrbit Community!**  
 A DevOrbit é uma plataforma **open-source** que conecta estudantes, entusiastas de tecnologia e desenvolvedores de todas as áreas. Nosso objetivo é criar um ambiente colaborativo e inspirador, onde todos podem compartilhar conhecimentos, projetos e experiências.
@@ -118,3 +121,4 @@ Vamos juntos transformar ideias em realidade! 💡🌍
 
 ---
 
+>>>>>>> 841f46931c1a86e05e8c47881033a4e6db188d8b

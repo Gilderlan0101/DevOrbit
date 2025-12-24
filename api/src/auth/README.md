@@ -1,307 +1,319 @@
-Um JWT (JSON Web Token) **é um padrão aberto para transmitir informações de forma segura e compacta entre duas partes, como um cliente e um servidor**. Ele consiste em três partes (header, payload e signature), é assinado digitalmente para garantir a integridade e autenticidade dos dados, e é comumente usado para autenticação em APIs. Os tokens contêm "reivindicações" (claims) sobre o usuário, como sua identidade ou permissões, permitindo que o servidor verifique a identidade do usuário sem precisar consultá-lo no banco de dados a cada solicitação.
+# Documentação Técnica: Sistema de Autenticação JWT com FastAPI e Scopes
 
-## Schemas
-**SystemUser**: É uma classe responsável por guardar as informações do usuário após ele ter realizado o login/autenticação. Dentro dela podemos guardar qualquer tipo de dado que vai ser válido até o fim de vida útil da aplicação.
+## Arquitetura do Sistema
+
+### 1. **Estrutura de Dependências e Injeção**
+
+**`get_current_user`** é uma **dependency** que funciona como um **middleware de autorização** para rotas FastAPI:
 
 ```python
-from pydantic import BaseModel, EmailStr
-from typing import Optional
-
-class SystemUser(BaseModel):
-    id: int
-    username: str
-    email: EmailStr
-    photo: Optional[str] = None
-    status: bool = True
-
-    model_config = {'from_attributes': True}
-```
-
-Agora criamos uma classe onde vamos guardar o id do usuário e o tempo válido para o token.
-```python
-class TokenPayload(BaseModel):
-    sub: Optional[str] = None
-    exp: Optional[int] = None
-```
-**sub**: ID do usuário
-**exp**: Tempo válido do token. Normalmente 8 horas ou 7 dias. Depende do projeto.
-
-# Passando os dados para a classe SystemUser
-Para passarmos os dados do usuário para a classe precisamos buscar esses dados em algum local. Geralmente no banco de dados. Para pegar os dados temos que verificar se o usuário existe. Se sim, pegamos as informações que vamos precisar para guardar na classe.
-```python
-
 async def get_current_user(
-    token: str = Depends(OAUTH2_SCHEME),
+    security_scopes: SecurityScopes,           # ← Injetado pelo FastAPI
+    token: Annotated[str, Depends(oauth2_scheme)],  # ← Token do header Authorization
 ) -> SystemUser:
-
-    token_data = DecodeToken(str(token))
-    user_id = int(token_data.data.sub)
-
-    search_target_user = await User.get_or_none(id=user_id)
-
-    if search_target_user:
-        system_user_data = SystemUser(
-            id=search_target_user.id,
-            username=search_target_user.username,
-            email=search_target_user.email,
-            photo=search_target_user.photo,
-            status=search_target_user.status,
-        )
-
-        return system_user_data
-
-    raise HTTPException(
-        status_code=status.HTTP_404_NOT_FOUND,
-        detail='Usuário não encontrado após validação do token.',
-    )
 ```
 
+### **Mecanismo de Injeção:**
+- **`SecurityScopes`**: Contém os scopes exigidos pela rota. Quando você usa `Security(get_current_user, scopes=["email:send"])`, o FastAPI injeta automaticamente este objeto.
+- **`oauth2_scheme`**: Extrai o token do header `Authorization: Bearer <token>`.
 
-# Desenvolvendo um depends com validação de token da forma correta
+## 2. **Fluxo de Validação Passo a Passo**
 
-É ideal separar todas as responsabilidades por arquivos. Vamos primeiro entender a estrutura de pastas e arquivos onde vamos desenvolver nossa verificação JWT.
-```
-├── config.py        <- Configuração do jwt e rotas
-├── constants.py
-├── dependencies.py  <- Criar dependências que serão injetadas
-├── exceptions.py    <- Cria erros genéricos em constantes
-├── models.py
-├── router.py
-├── schemas.py       <- Schemas que apenas este módulo auth/ pode usar
-├── service.py
-└── utils.py         <- funções úteis que todo o módulo pode usar
-```
-
-# config.py
+### **Fase 1: Configuração do Header WWW-Authenticate**
 ```python
-import os
-from pwdlib import PasswordHash
-from fastapi.security import OAuth2PasswordBearer
-from dotenv import load_dotenv
-
-
-
-load_dotenv()
-
-SECRET_KEY = os.getenv("SECRET_KEY")
-ALGORITHM = os.getenv("ALGORITHM")
-ACCESS_TOKEN_EXPIRE_MINUTES = 30 # TODO: Alterar para 8 horas
-
-
-password_hash = PasswordHash.recommended()
-
-oauth2_scheme = OAuth2PasswordBearer(
-    tokenUrl="token",
-    scopes={"me": "Read information about the current user"}
-)
-
-
+authenticate_value = "Bearer"
+if security_scopes.scopes:
+    authenticate_value = f'Bearer scope={security_scopes.scope_str}'
 ```
-Dentro de `config.py` podemos configurar nossas variáveis de ambiente, configurações que as rotas vão usar e afins.
+- **Propósito**: Informa ao cliente quais scopes são necessários em caso de erro 401/403.
+- **Formato**: `Bearer scope=email:send user:read` para múltiplos scopes.
 
-# utils.py
+### **Fase 2: Decodificação JWT**
 ```python
+payload = jwt.decode(token, str(SECRET_KEY), algorithms=ALGORITHM)
+```
+⚠️ **Ponto Crítico**: Anteriormente havia `algorithms=[str(ALGORITHM)]`, que causava o erro "alg value is not allowed" por converter `"HS256"` para `'"HS256"'` (com aspas extras).
 
-import jwt
-from datetime import datetime, timedelta, timezone
-from src.auth.config import (
-    password_hash,
-    SECRET_KEY,
-    ALGORITHM,
-)
-from src.auth.schemas import UserInDB
+### **Fase 3: Extração de Claims**
+```python
+username = payload.get("sub")            # Email do usuário (não username!)
+scope = payload.get("scope", "")         # String: "email:send user:read"
+token_scopes = scope.split()             # Lista: ["email:send", "user:read"]
+```
 
-def verify_password(plain_password: str, hashed_password: str) -> bool:
-    """Verificar se uma senha comum ex: (senha123)
-    É a mesma no formato hash. Basicamente uma comparação entre
-    plain_password == hashed_password.
+### **Fase 4: Busca do Usuário no Banco**
+```python
+user = await get_user(db, username=token_data.username)
+```
+**Importante**: `get_user` busca por **email**, não por username, mesmo que o parâmetro se chame `username`.
 
-    params:
-        plain_password: str -> Senha comum
-        hashed_password: str -> Senha hash
-    return:
-        bool
-    """
-    return password_hash.verify(plain_password, hashed_password)
+### **Fase 5: Verificação de Scopes**
+```python
+for scope in security_scopes.scopes:
+    if scope not in token_data.scopes:
+        raise HTTPException(status_code=403, ...)
+```
+- **Lógica**: Todos os scopes exigidos pela rota DEVEM estar presentes no token.
+- **Exemplo**: Rota com `scopes=["email:send"]` → token precisa ter `"email:send"`.
 
+## 3. **Ciclo de Vida do Token**
 
-def get_password_hash(password: str) -> str:
-    """Buscar hash da senha fornecida no parâmetro password"""
-    return password_hash.hash(password)
+### **Geração (`create_access_token`):**
+```python
+def create_access_token(data: dict, expires_delta: timedelta | None = None):
+    to_encode.update({
+        'exp': expire,  # Timestamp com timezone
+        "scope": "email:send user:read user:write",  # ← SCOPES AQUI
+    })
+    return jwt.encode(to_encode, str(SECRET_KEY), algorithm=ALGORITHM)
+```
 
+### **Valores Padrão de Scopes:**
+- `email:send` → Enviar emails de verificação
+- `user:read` → Ler informações do usuário
+- `user:write` → Criar/editar recursos
 
+## 4. **Arquivo `utils.py` - Explicação Técnica**
 
-async def get_user(db, username: str):
-    """get_user: Verifica se temos um usuário com o email
-    fornecido no parâmetro username. Se o email estiver cadastrado,
-    a função deve retornar os dados desse usuário."""
-
+### **`get_user` - Busca Otimizada:**
+```python
+async def get_user(db, username: str) -> db | None:
     user = await db.filter(email=username).first()
-    if not user:
+    if not user:  # Ou: if not user or not user.status
         return None
     return user
-
-
-def create_access_token(data: dict, expires_delta: timedelta | None = None):
-    """ create_access_token: Cria um token válido para o usuário."""
-    try:
-
-        to_encode = data.copy()
-        if expires_delta:
-            expire = datetime.now(timezone.utc) + expires_delta
-        else:
-            expire = datetime.now(timezone.utc) + timedelta(minutes=15)
-
-        to_encode.update({"exp": expire})
-        encode_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-        return encode_jwt
-
-
-
-    except Exception as e:
-        print("auth/utils.py: create_access_token")
-        return str(e)
-
 ```
-Dentro de `utils.py` podemos criar funções que serão usadas por todo o módulo auth. Isso vai permitir criar menos códigos em outros arquivos como **`router.py`**.
-Explicando o código acima:
-```python
-if expires_delta:
-            expire = datetime.now(timezone.utc) + expires_delta
-else:
-    expire = datetime.now(timezone.utc) + timedelta(minutes=15)
-```
-Na primeira linha estamos verificando se um tempo válido do token foi passado para o **`expires_delta`** (no caso foi passado 30 minutos). Se foi passado, ele vai pegar o horário atual e somar mais 30 minutos. Ex: 12:30 + 30 = 13:00, ou seja, esse token vai ser válido por 30 minutos.
+- **Assíncrono**: Usa `await` para não bloquear o event loop.
+- **`first()`**: Retorna apenas o primeiro resultado (email é único).
 
-Agora, se o `expires_delta` não for passado, criamos um token de apenas 15 minutos. Aqui no `else` poderíamos criar uma validação melhor para que sempre seja mais de 15 minutos. Ex: poderíamos criar uma mensagem para exibir para o programador que um valor do tipo inteiro não foi passado para a função **`create_access_token`** e que o tempo padrão é 15, assim deixando o desenvolvedor avisado sobre o "problema".
-
-**Criando e retornando um token válido:**
-Agora que entendemos como criar um token com um tempo válido, vamos entender como passamos o valor datetime para criar um token.
-```python
-to_encode.update({"exp": expire})
-encode_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-return encode_jwt
-```
-**`to_encode`**: update("exp": valor) -> Basicamente estamos adicionando o tempo válido do token em um dicionário. Ficaria algo como:
-```python
-token = {"exp": "2025-12-15 22:38:22.652295+00:00"}
-```
-Mas veja que o horário acima está em um formato diferente do brasileiro. Para gerar um token válido com horário do Brasil usamos o **`ZoneInfo`** do Python, para retornar algo como:
-```
-2025-12-15 20:15:51.875675-03:00
-```
-
-Implementação:
-```python
-
-from datetime import datetime, timedelta
-from zoneinfo import ZoneInfo
-
-
-if expires_delta:
-            expire = datetime.now(ZoneInfo("America/Sao_Paulo")) + expires_delta
-else:
-    expire = datetime.now(ZoneInfo("America/Sao_Paulo")) + timedelta(minutes=15)
-```
-
-**Finalizando a explicação da função `create_access_token`:**
-Agora que já entendemos como criar um token com tempo válido, vamos entender o que está acontecendo no final da função.
-```python
-encode_jwt = jwt.encode(to_encode, SECRET_KEY, algorithm=ALGORITHM)
-```
-- **`to_encode` (Payload):** O dicionário Python que você passa aqui (o "payload") contém os dados que você deseja armazenar no token (por exemplo, `{"sub": "123", "name": "usuario"}`).
-- **`SECRET_KEY` (Chave Secreta):** Essa chave é usada para assinar digitalmente o token. Isso garante a integridade e a autenticidade do token, provando que ele não foi alterado por ninguém sem acesso à chave secreta.
-- **`ALGORITHM` (Algoritmo):** Define qual método criptográfico será usado para a assinatura (comumente `"HS256"` ou `"RS256"`).
-
-O resultado da chamada é uma _string_ longa e codificada, que representa o seu JWT final (geralmente dividido em três partes separadas por pontos: `header.payload.signature`).
-
-
-
-## Função que verifica se as informações passadas pelo usuário realmente estão corretas
-
+### **`authenticate_user` - Validação Dupla:**
 ```python
 async def authenticate_user(db, username: str, password: str):
-
-    user = await get_user(db=db, username=username)
+    user = await get_user(db=db, username=username)  # 1. Usuário existe?
     if not user:
         return False
-    if not verify_password(password, user.password):
+    if not verify_password(password, user.password):  # 2. Senha correta?
         return False
     return user
 ```
 
-Parâmetros: db, username e password
-**db**: -> Tabela onde as informações do usuário estão guardadas.
-**username:** -> Email que o usuário vai passar na rota de login.
-**password:** -> Senha comum que será comparada com a senha no formato hash da tabela.
+### **`verify_password` - Segurança:**
 ```python
-async def authenticate_user(db, username: str, password: str):
+def verify_password(plain_password: str, hashed_password: str) -> bool:
+    return password_hash.verify(plain_password, hashed_password)
+```
+- **Algoritmo**: Usa Argon2 (via `pwdlib.recommended()`), resistente a ataques de força bruta.
+
+## 5. **Códigos de Status HTTP e Significado**
+
+| Código | Significado | Causa Provável |
+|--------|-------------|----------------|
+| **200** | Sucesso | Token válido e scopes corretos |
+| **401 Unauthorized** | Credenciais inválidas | Token expirado, assinatura inválida, usuário não encontrado |
+| **403 Forbidden** | Permissão insuficiente | Token não tem os scopes exigidos pela rota |
+
+## 6. **Debug e Logs**
+
+### **Informações Úteis para Debug:**
+```python
+# Adicione estes prints em get_current_user:
+print(f"Token recebido: {token[:50]}...")
+print(f"Scopes requeridos: {security_scopes.scopes}")
+print(f"Scopes no token: {token_scopes}")
+print(f"Usuário buscado: {token_data.username}")
 ```
 
-
-## router.py
-
-Agora precisamos de rotas para autenticar o usuário.
-
-```python
-from datetime import timedelta
-from typing import Annotated
-
-from fastapi import APIRouter, Depends, HTTPException, status
-from fastapi.security import OAuth2PasswordRequestForm
-from src.auth.schemas import CreateAccount, Token
-from src.auth.service import create_account
-from src.global_utils.i_request import permitted_origin
-from src.auth.utils import authenticate_user, create_access_token
-from src.global_models.user import User as db
-from src.auth.config import ACCESS_TOKEN_EXPIRE_MINUTES
-
-
-router = APIRouter(tags=['Auth'], prefix='/auth')
-
-
-@router.post('/register')
-async def register_account(
-    data: CreateAccount,
-    origin=Depends(permitted_origin),
-):
-
-    create = await create_account(data=dict(data))
-    if create:
-        return create
-    else:
-        return create
-
-
-
-@router.post('/login', response_model=Token)
-async def login(
-    form_data: Annotated[OAuth2PasswordRequestForm, Depends()]
-):
-
-    user = await authenticate_user(
-        db=db,
-        username=form_data.username,
-        password=form_data.password
-    )
-
-    if not user:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Incorrect username or password"
-        )
-    access_token_expires = timedelta(minutes=ACCESS_TOKEN_EXPIRE_MINUTES)
-    access_token = create_access_token(
-        data={"sub": user.username, "scope": " ".join(form_data.scopes)},
-        expires_delta=access_token_expires,
-    )
-    return Token(access_token=access_token, token_type="bearer")
-
+### **Sequência de Logs Esperada:**
 ```
-Saída
-```bash
+Bearer scope=user:write        # ← Header WWW-Authenticate
+['email:send', 'user:read']    # ← Scopes do token (DEBUG)
+200 OK                         # ← Sucesso
+```
+
+## 7. **Padrões de Uso em Rotas**
+
+### **Rota Pública (sem autenticação):**
+```python
+@router.get('/public')
+async def public_route():
+    return {"message": "Acesso livre"}
+```
+
+### **Rota Protegida (autenticação básica):**
+```python
+@router.get('/protected')
+async def protected_route(
+    current_user: SystemUser = Depends(get_current_user)  # ← Sem scopes
+):
+    return {"user": current_user.email}
+```
+
+### **Rota com Scopes Específicos:**
+```python
+@router.post('/admin')
+async def admin_route(
+    current_user: SystemUser = Security(get_current_user, scopes=["admin"])
+):
+    return {"message": "Acesso administrativo"}
+```
+
+### **Rota com Múltiplos Scopes:**
+```python
+@router.put('/resource/{id}')
+async def update_resource(
+    current_user: SystemUser = Security(
+        get_current_user,
+        scopes=["user:read", "user:write"]  # ← AND lógico: precisa de AMBOS
+    )
+):
+    return {"message": "Recurso atualizado"}
+```
+
+## 8. **Configuração do Ambiente**
+
+### **Arquivo `.env`:**
+```env
+SECRET_KEY=uma-chave-secreta-longa-de-pelo-menos-32-caracteres
+ALGORITHM=HS256  # ← SEM aspas, apenas HS256
+```
+
+### **Importância da `SECRET_KEY`:**
+- **32+ caracteres**: Para HS256, mínimo recomendado.
+- **Armazenamento seguro**: Nunca commitar no código.
+- **Rotação periódica**: Mudar em produção regularmente.
+
+## 9. **Problemas Resolvidos e Soluções**
+
+### **Problema 1: "alg value is not allowed"**
+```python
+# ERRADO (causava erro):
+payload = jwt.decode(token, str(SECRET_KEY), algorithms=[str(ALGORITHM)])
+
+# CORRETO:
+payload = jwt.decode(token, str(SECRET_KEY), algorithms=ALGORITHM)
+```
+
+### **Problema 2: Scopes ausentes no token**
+```python
+# Login endpoint - garantir scopes adequados:
+access_token = create_access_token(
+    data={
+        'sub': user.email,
+        'scope': "email:send user:read user:write"  # ← Incluir todos necessários
+    },
+    expires_delta=access_token_expires,
+)
+```
+
+### **Problema 3: `status=False` bloqueia acesso**
+```python
+# Em get_user:
+if not user or not user.status:  # ← Verifica status
+    return None
+
+# Em get_current_user:
+if user is None:  # ← Inclui falha por status=False
+    raise credentials_exception
+```
+
+## 10. **Melhores Práticas Implementadas**
+
+### **1. Timezone Correto:**
+```python
+# Usa America/Sao_Paulo em vez de UTC
+expire = datetime.now(ZoneInfo('America/Sao_Paulo')) + expires_delta
+```
+
+### **2. Tratamento de Erros Granular:**
+- 401 para problemas de autenticação
+- 403 para problemas de autorização
+- Mensagens claras no header `WWW-Authenticate`
+
+### **3. Separação de Responsabilidades:**
+- `dependencies.py`: Lógica de autorização
+- `utils.py`: Operações utilitárias
+- `router.py`: Definição de endpoints
+
+### **4. Assincronia Correta:**
+```python
+# Todas as operações de I/O são async/await
+user = await get_user(db, username=token_data.username)
+```
+
+## 11. **Exemplo Completo de Requisição/Resposta**
+
+### **Request:**
+```http
+POST /auth/pull_code_email HTTP/1.1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+Accept: application/json
+```
+
+### **Response (Sucesso):**
+```json
 {
-  "access_token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiJtYXJpYSIsInNjb3BlIjoiIiwiZXhwIjoxNzY1OTgzOTI2fQ.1V5CqNV4jGMFj15X1_fLnWQKsbKxpIcDPNWEvvdkQrE",
-  "token_type": "bearer"
+  "message": "Código enviado com sucesso",
+  "User": "joao.silva@example.com"
 }
 ```
+
+### **Response (Erro 403):**
+```http
+HTTP/1.1 403 Forbidden
+WWW-Authenticate: Bearer scope=user:write
+Content-Type: application/json
+
+{
+  "detail": "Not enough permissions"
+}
+```
+
+## 12. **Considerações de Segurança**
+
+### **Token Security:**
+- **Vida curta**: 30 minutos (configurável)
+- **HTTPS obrigatório**: Em produção
+- **HttpOnly cookies**: Alternativa para SPAs
+
+### **Rate Limiting:**
+Implementar em rotas de login para prevenir brute force:
+```python
+from slowapi import Limiter, _rate_limit_exceeded_handler
+limiter = Limiter(key_func=get_remote_address)
+```
+
+### **Logging de Tentativas Falhas:**
+```python
+import logging
+logger = logging.getLogger(__name__)
+
+# Em get_current_user:
+except (JWTError, ValidationError) as e:
+    logger.warning(f"Token inválido: {e}")
+    raise credentials_exception
+```
+
+## 13. **Extensibilidade**
+
+### **Adicionar Novos Scopes:**
+1. Adicionar em `config.py`:
+```python
+oauth2_scheme = OAuth2PasswordBearer(
+    scopes={
+        # ... scopes existentes ...
+        "posts:create": "Criar posts",
+        "posts:delete": "Excluir posts",
+    }
+)
+```
+
+2. Usar nas rotas:
+```python
+@router.post('/posts')
+async def create_post(
+    current_user: SystemUser = Security(get_current_user, scopes=["posts:create"])
+):
+    # ...
+```
+
+Esta documentação técnica cobre todos os aspectos do sistema de autenticação JWT implementado, desde a arquitetura até detalhes de implementação e boas práticas de segurança.

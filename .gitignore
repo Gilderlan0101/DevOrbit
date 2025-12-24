@@ -1,3 +1,27 @@
+<<<<<<< HEAD
+### AL ###
+#Template for AL projects for Dynamics 365 Business Central
+#launch.json folder
+.vscode/
+#Cache folder
+.alcache/
+#Symbols folder
+.alpackages/
+#Snapshots folder
+.snapshots/
+#Testing Output folder
+.output/
+#Extension App-file
+*.app
+#Rapid Application Development File
+rad.json
+#Translation Base-file
+*.g.xlf
+#License-file
+*.flf
+#Test results file
+TestResults.xml
+=======
 # Ignora as pastas e arquivos específicos
 teste_requestr_and_try
 /teste_requestr_and_try
@@ -71,3 +95,4 @@ local_settings.py
 
 .venv
 poetry.lock
+>>>>>>> 841f46931c1a86e05e8c47881033a4e6db188d8b

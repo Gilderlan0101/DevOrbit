@@ -4,71 +4,69 @@ from application.src.services.api_service import dataRequests
 import logging
 
 
-
-
 def get_user_info(user_id):  # Busca por ID | usuario logado | Dono da conta
     banco, cursor = my_db()
 
     # Buscar informações completas do usuário no banco
     cursor.execute(
         'SELECT id, photo, bio, github, likedin, site, followers, following, banner, name FROM usuarios WHERE id = ?',
-        (user_id,)
+        (user_id,),
     )
     user = cursor.fetchone()
     print(user)
-   
 
     if not user:
-        logging.warning(f"User with ID {user_id} not found.")
+        logging.warning(f'User with ID {user_id} not found.')
         return None  # Ou uma lista vazia, dependendo do contexto
 
     return {
-    'id': user[0],
-    'user_photo': user[1],
-    'bio': user[2],
-    'github': user[3],
-    'linkedin': user[4],
-    'site': user[5],
-    'followers': user[6],
-    'following': user[7],
-    'banner': user[8],
-    'username': user[9]
-}
+        'id': user[0],
+        'user_photo': user[1],
+        'bio': user[2],
+        'github': user[3],
+        'linkedin': user[4],
+        'site': user[5],
+        'followers': user[6],
+        'following': user[7],
+        'banner': user[8],
+        'username': user[9],
+    }
 
 
-
-    
-
-def UserData(usuario): # This function receives current_user.id:
-    banco, cursor = my_db()  # Devemos usar essa função para mostra recomendaçoes no celular
-    
+def UserData(usuario):   # This function receives current_user.id:
+    (
+        banco,
+        cursor,
+    ) = (
+        my_db()
+    )  # Devemos usar essa função para mostra recomendaçoes no celular
 
     # Fetch the logged-in user's information:
     cursor.execute(
         'SELECT id, name,  occupation FROM user_information WHERE id = ?',
-        (usuario,)
+        (usuario,),
     )
     user = cursor.fetchone()
-   
+
     if not user:
         # caso o usuario / user_id não for encontrado
         logging.info('user not found')
         return None
 
-     # Directly return a dictionary list with the information
+    # Directly return a dictionary list with the information
     return {
-    'id': user[0],
-    'username': user[1],
-    'occupation': user[2].capitalize()
-}
+        'id': user[0],
+        'username': user[1],
+        'occupation': user[2].capitalize(),
+    }
+
 
 def get_infor_comment(user_id):
     banco, cursor = my_db()
 
     # Consulta as informações do usuário
     cursor.execute(
-        'SELECT id, name, photo FROM usuarios WHERE id = ?',
-        (user_id,)
+        'SELECT id, name, photo FROM usuarios WHERE id = ?', (user_id,)
     )
     user = cursor.fetchone()
 
@@ -79,18 +77,18 @@ def get_infor_comment(user_id):
     return {
         'id': user[0],
         'username': user[1],
-        'photo': user[2] or 'icon/default.svg'  # Foto padrão
+        'photo': user[2] or 'icon/default.svg',  # Foto padrão
     }
 
 
 def enrich_posts_with_user_info(posts):
     """
     Enriquecimento dos posts com id e nome dos usuários nos comentários.
-    Essa função buscar pegar o id do usuario que comentou em um post, com o id do usuario buscamos informaçoes sobre 
+    Essa função buscar pegar o id do usuario que comentou em um post, com o id do usuario buscamos informaçoes sobre
     ele. como (foto e nome).
     """
     enriched_posts = []
-    
+
     for post in posts:
         # Garantir que a chave 'comments' é uma lista
         if 'comments' not in post or not isinstance(post['comments'], list):
@@ -110,7 +108,7 @@ def enrich_posts_with_user_info(posts):
                 else:
                     # Adicionar informações padrão se o usuário não for encontrado
                     comment['photo'] = None
-                    comment['username'] = "Desconhecido"
+                    comment['username'] = 'Desconhecido'
 
             enriched_comments.append(comment)
 
@@ -119,4 +117,3 @@ def enrich_posts_with_user_info(posts):
         enriched_posts.append(post)
 
     return enriched_posts
-
